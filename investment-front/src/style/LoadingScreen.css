@@ -1,0 +1,35 @@
+@keyframes blockspin-container {
+    0% {
+        background: #5699d2
+    }
+
+    12.5% {
+        background: #5699d2
+    }
+
+    12.625% {
+        background: #1d3f72
+    }
+
+    100% {
+        background: #1d3f72
+    }
+}
+
+
+
+.blockspin-container div {
+    background: #1d3f72;
+    animation: blockspin-container 1s linear infinite;
+}
+
+
+.blockspin-container {
+    display: grid;
+    grid-template-columns: repeat(3, 20px);
+    grid-template-rows: repeat(3, 20px);
+    gap: 5px;
+
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+}
