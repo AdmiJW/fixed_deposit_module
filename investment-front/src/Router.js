@@ -9,6 +9,8 @@ import Delete from './pages/Delete';
 import ScheduleList from './pages/ScheduleList';
 import AcceptReject from './pages/AcceptReject';
 import DepositWithdrawal from './pages/DepositWithdrawal';
+import Logout from './pages/Logout';
+import Login from './pages/Login';
 
 
 // What URL to redirect to if root url is provided?
@@ -28,6 +30,9 @@ export const RouteList = [
     { name: 'Approve Fixed Deposit', path: '/fd/approve/:id', component: AcceptReject, displayInSidebar: false, props: { mode: 'APPROVE' } },
     { name: 'Reject Fixed Deposit', path: '/fd/reject/:id', component: AcceptReject, displayInSidebar: false, props: { mode: 'REJECT' } },
     { name: 'Additions/Withdrawals', path: '/fd/addition_withdraw/:id', component: DepositWithdrawal, displayInSidebar: false },
+
+    { name: "Log out", path: '/logout', component: Logout, displayInSidebar: false },
+    { name: "Log in", path: '/login', component: Login, displayInSidebar: false },
 ];
 
 

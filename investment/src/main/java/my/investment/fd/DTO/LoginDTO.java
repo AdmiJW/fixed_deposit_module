@@ -1,5 +1,7 @@
 package my.investment.fd.DTO;
 
+import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,4 +10,5 @@ import lombok.Setter;
 public class LoginDTO {
     private String username;
     private String password;
+    private Boolean rememberMe;
 }

@@ -3,6 +3,7 @@ import { RouteList } from '../Router.js';
 import { AppContext } from "../AppContext";
 
 import { Button } from 'rsuite';
+import LoginLogout from '../components/LoginLogout.js';
 
 
 export default function Navbar() {
@@ -14,7 +15,7 @@ export default function Navbar() {
 
 
 
-    const { crumb, info, warning, success, danger } = useContext(AppContext);
+    const { crumb, info, warning, success, danger, user } = useContext(AppContext);
     const crumbList = [{
         name: RouteList[0].name,
         route: RouteList[0].path
@@ -47,6 +48,9 @@ export default function Navbar() {
                         ))
                     }
                 </ol>
+
+                {/* ! Put login logout component here */}
+                <LoginLogout user={user} />
             </nav>
 
             {/* The title of page */}

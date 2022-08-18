@@ -1,6 +1,8 @@
 package my.investment.fd.Controllers;
 
 
+import java.util.Collections;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +21,12 @@ import my.investment.fd.DTO.LoginDTO;
 import my.investment.fd.DTO.RegistrationDTO;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
-import my.investment.fd.Security.Auth;
 
 
 
 
 @Controller
 @RequestMapping(path="/auth")
-@CrossOrigin
 public class AuthenticationController {
 
     // Repository Dependency Injection
@@ -55,7 +55,8 @@ public class AuthenticationController {
 
         // Set user id into session
         session.setAttribute("userId", user.getId() );
-        return ResponseEntity.ok("Login successful");
+        session.setMaxInactiveInterval( dto.getRememberMe()? -1: 60 * 60 ); // 1 hour until session expiry
+        return ResponseEntity.ok( user );
     }
 
 
@@ -70,21 +71,21 @@ public class AuthenticationController {
         dto.setPassword( passwordEncoder.encode(dto.getPassword() ) );
         // Save user
         userRepository.save( dto.toEntity() );
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok( Collections.singletonMap("message", "Registration successful. Please proceed to login") );
     }
 
 
     @RequestMapping(path="/logout")
     public ResponseEntity<Object> logout(HttpSession session) {
         session.invalidate();
-        return ResponseEntity.ok().body("Logged out");
+        return ResponseEntity.ok().body( Collections.singletonMap("message", "Log out successful") );
     }
 
 
-    @RequestMapping(path="/is_logged_in")
+    @GetMapping(path="/is_logged_in")
     public ResponseEntity<Object> isLoggedIn(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
-        if ( userId == null) return ResponseEntity.ok().body("Not logged in");
+        if ( userId == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in");
         return ResponseEntity.ok().body( userRepository.findById(userId) );
     }
 }
