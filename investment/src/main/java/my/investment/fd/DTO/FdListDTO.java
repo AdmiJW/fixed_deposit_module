@@ -36,7 +36,7 @@ public class FdListDTO {
         dto.setPrincipalAmount(fd.getPrincipalAmount());
         dto.setInterestRate(fd.getInterestRate());
         dto.setInterestAmount(fd.getInterestAmount());
-        dto.setRegisteredBy(fd.getRegistration().getRegisteredBy());
+        dto.setRegisteredBy(fd.getUser().getName());
         dto.setStatus(fd.getStatus());
         dto.setTotalAddition(fd.getTotalAddition());
         dto.setTotalWithdrawal(fd.getTotalWithdrawal());

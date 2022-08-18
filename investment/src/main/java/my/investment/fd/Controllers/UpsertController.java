@@ -154,6 +154,8 @@ public class UpsertController {
     // 4. Connect pieces together
     // 5. Save to database
     private Object upsertFixedDeposit(FdUpsertDTO dto) {
+        // TODO: You have to update the logged in user from the session as well.
+
         FixedDeposit fd = new FixedDeposit();
         Registration reg = new Registration();
 

@@ -10,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -56,13 +58,19 @@ public class FixedDeposit {
 
     // Withdrawal (One to Many)
     @OneToMany(mappedBy = "fixedDeposit", cascade = CascadeType.ALL)
-    @JsonManagedReference  // Not serialized here - Only shown in schedules
+    @JsonManagedReference  
     private List<Withdrawal> withdrawals;
 
     // Addition (One to Many)
     @OneToMany(mappedBy = "fixedDeposit", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Addition> additions;
+
+    // User (One to One)
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id")
+    @JsonManagedReference
+    private User user;
 
 
     // Constructor - Set status to NEW

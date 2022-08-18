@@ -23,7 +23,6 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate registeredDate;
-    private String registeredBy;
     private Double initialAmount;
     private Double interestRate;
     private String bank;

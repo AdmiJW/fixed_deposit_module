@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="mPpDOSAMnxNj2uNVnUjM" name="Page-1">
-        <mxGraphModel dx="1592" dy="1549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1824" dy="1493" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -31,7 +31,7 @@
                 <mxCell id="t8Pp8utrSWtBbzFyiBZC-18" value="registration" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#f5f5f5;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
                     <mxGeometry x="-130" y="140" width="190" height="220" as="geometry"/>
                 </mxCell>
-                <mxCell id="t8Pp8utrSWtBbzFyiBZC-19" value="id: Long&#10;registeredDate: Date&#10;registeredBy: String&#10;initialAmount: double&#10;interestRate: Double&#10;bank: String&#10;certificateNo: String&#10;referenceNo: String&#10;period: int&#10;&#10;fixedDeposit: FixedDeposit" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t8Pp8utrSWtBbzFyiBZC-18" vertex="1">
+                <mxCell id="t8Pp8utrSWtBbzFyiBZC-19" value="id: Long&#10;registeredDate: Date&#10;initialAmount: double&#10;interestRate: Double&#10;bank: String&#10;certificateNo: String&#10;referenceNo: String&#10;period: int&#10;&#10;fixedDeposit: FixedDeposit" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t8Pp8utrSWtBbzFyiBZC-18" vertex="1">
                     <mxGeometry y="26" width="190" height="194" as="geometry"/>
                 </mxCell>
                 <mxCell id="t8Pp8utrSWtBbzFyiBZC-22" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmandOne;startArrow=ERmandOne;rounded=0;" parent="1" source="t8Pp8utrSWtBbzFyiBZC-18" target="t8Pp8utrSWtBbzFyiBZC-5" edge="1">
@@ -53,7 +53,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="12" value="FDUpsertDTO" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="-130" y="-200" width="190" height="216" as="geometry"/>
+                    <mxGeometry x="-120" y="-200" width="190" height="216" as="geometry"/>
                 </mxCell>
                 <mxCell id="13" value="id: Long&#10;name: String&#10;registeredBy: String&#10;registeredDate: Date&#10;bank: String&#10;certificateNo: String&#10;referenceNo: String&#10;comment: String&#10;startDate: Date&#10;period: Integer&#10;initialAmount: Double&#10;interestRate: Double&#10;status: FdStatus" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="12" vertex="1">
                     <mxGeometry y="26" width="190" height="190" as="geometry"/>
@@ -75,6 +75,30 @@
                 </mxCell>
                 <mxCell id="18" value="id: Long&#10;fixedDepositId: Long&#10;amount: Double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="17" vertex="1">
                     <mxGeometry y="26" width="190" height="194" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="user" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#f5f5f5;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="-130" y="390" width="190" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="id: Long&#10;registeredDate: Date&#10;gender: Gender&#10;username: String&#10;password: String&#10;name: String&#10;email: String&#10;birthDate: Date&#10;role: Role" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="19" vertex="1">
+                    <mxGeometry y="26" width="190" height="194" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;startArrow=ERmandOne;rounded=0;" parent="1" source="19" target="t8Pp8utrSWtBbzFyiBZC-7" edge="1">
+                    <mxGeometry width="100" height="100" relative="1" as="geometry">
+                        <mxPoint x="160" y="410" as="sourcePoint"/>
+                        <mxPoint x="400" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="LoginDTO" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="-330" y="-200" width="190" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="username: String&#10;password: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="24" vertex="1">
+                    <mxGeometry y="26" width="190" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="RegistrationDTO" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="-330" y="-100" width="190" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="gender: Gender&#10;name: String&#10;username: String&#10;password: String&#10;email: String&#10;birthDate: Date&#10;role: Role" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="26" vertex="1">
+                    <mxGeometry y="26" width="190" height="124" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

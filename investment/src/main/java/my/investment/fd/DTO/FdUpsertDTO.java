@@ -58,7 +58,6 @@ public class FdUpsertDTO {
     public void updateToRegistration(Registration r) {
         //! ID is not set and left as it is
         r.setRegisteredDate(registeredDate);
-        r.setRegisteredBy(registeredBy);
         r.setInitialAmount(initialAmount);
         r.setInterestRate(interestRate);
         r.setBank(bank);
@@ -96,7 +95,6 @@ public class FdUpsertDTO {
         FdUpsertDTO dto = new FdUpsertDTO();
         dto.setId(fd.getId());
         dto.setName(fd.getName());
-        dto.setRegisteredBy(fd.getRegistration().getRegisteredBy());
         dto.setRegisteredDate(fd.getRegistration().getRegisteredDate());
         dto.setBank(fd.getRegistration().getBank());
         dto.setCertificateNo(fd.getRegistration().getCertificateNo());
