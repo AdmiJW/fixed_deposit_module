@@ -23,7 +23,6 @@ public class MyApplicationSecurityConfig {
 
     // Put the hostnames here that you want added into Access-Control-Allow-Origin header
     private static final List<String> ALLOWED_HOSTNAMES = Arrays.asList(
-        "http://localhost:7208",
         "http://localhost:3000"
     );
     // Put the allowed methods here that you want added into Access-Control-Allow-Methods header

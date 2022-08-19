@@ -1,6 +1,6 @@
 import React from "react";
 
-import '../style/LoadingScreen.css';
+import '../../style/LoadingScreen.css';
 
 
 

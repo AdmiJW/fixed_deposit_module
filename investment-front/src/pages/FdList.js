@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
 import { Pagination, Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from '../AppContext';
-import FdTable from '../components/FdTable';
+import FdTable from '../components/table/FdTable';
 import { getListView } from '../services/restServer';
 
 

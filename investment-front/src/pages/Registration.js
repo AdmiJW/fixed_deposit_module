@@ -39,9 +39,9 @@ const validationSchema = Yup.object({
 });
 
 
-// TODO: Extract success page and error page as components.
-// TODO: Registration states, and render differently
+// TODO: Registration page states, and render differently using the simple message screen
 // TODO: The rest of registration form.
+// TODO: Backend.
 
 
 

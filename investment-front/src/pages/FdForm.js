@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { AppContext } from '../AppContext';
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from '../components/screen/LoadingScreen';
 import { getUpsertView, postUpsert, getInterestAmount } from '../services/restServer';
 
 
@@ -20,7 +20,6 @@ const initialValues = {
     
     // Form Group 1 - Registration
     name: '',
-    registeredBy: '',
     registeredDate: null,
     bank: '',
     certificateNo: '',
@@ -36,7 +35,6 @@ const initialValues = {
 // Validation schema of form
 const validationSchema = Yup.object({
     name: Yup.string().required('Required'),
-    registeredBy: Yup.string().required('Required'),
     registeredDate: Yup.date().required('Required'),
     bank: Yup.string().required('Required'),
     certificateNo: Yup.string().required('Required'),
@@ -203,7 +201,6 @@ function FdForm(props) {
 
             {/* Registrant's Name, Registration Date, Bank */}
             <div className="row">
-                { generateTextFieldGroup('registeredBy', "Registrant's Name")}
                 { generateDatePickerGroup('registeredDate', 'Registration Date')}
                 { generateTextFieldGroup('bank', 'Bank')}
             </div>

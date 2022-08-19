@@ -22,7 +22,6 @@ public class FdUpsertDTO {
     private Long id;
 
     private String name;
-    private String registeredBy;
     private LocalDate registeredDate;
     private String bank;
     private String certificateNo;

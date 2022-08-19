@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Pagination, Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from '../AppContext';
-import ScheduleTable from '../components/ScheduleTable';
+import ScheduleTable from '../components/table/ScheduleTable';
 import { getSchedules } from '../services/restServer';
 
 

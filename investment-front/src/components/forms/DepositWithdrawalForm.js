@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup, Form, Radio, RadioGroup, InputNumber } from 'rsuite';
 
-import { postAddition, postWithdrawal } from '../services/restServer';
-import { AppContext } from '../AppContext';
+import { postAddition, postWithdrawal } from '../../services/restServer';
+import { AppContext } from '../../AppContext';
 
 
 

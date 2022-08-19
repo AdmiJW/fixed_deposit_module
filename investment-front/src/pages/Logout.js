@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from "../AppContext";
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from '../components/screen/LoadingScreen';
+import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 import { logout } from '../services/restServer';
 
 
@@ -31,11 +32,9 @@ export default function Logout() {
 
     if (!isLoggedOut) return <LoadingScreen text="Logging out..." />;
 
-    return (
-        <div className="text-center mt-4 mb-4">
-            <i className="fas fa-check-circle fs-1 text-success mb-3"></i>
-            <div className="my-3 lead">Successfully logged out!</div>
-            <Link to="/login" className='btn btn-primary text-decoration-none' >Return to Home</Link>
-        </div>
-    );
+    return <SimpleMessageScreen
+        icon={["fas", "fa-check-circle", 'text-success']}
+        message="Successfully logged out!"
+        links={<Link to="/login" className="btn btn-primary text-decoration-none">Login</Link>}
+    />
 }

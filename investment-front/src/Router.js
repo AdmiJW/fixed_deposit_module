@@ -11,6 +11,7 @@ import AcceptReject from './pages/AcceptReject';
 import DepositWithdrawal from './pages/DepositWithdrawal';
 import Logout from './pages/Logout';
 import Login from './pages/Login';
+import TestForm from './components/forms/TestForm';
 
 
 // What URL to redirect to if root url is provided?
@@ -33,6 +34,8 @@ export const RouteList = [
 
     { name: "Log out", path: '/logout', component: Logout, displayInSidebar: false },
     { name: "Log in", path: '/login', component: Login, displayInSidebar: false },
+
+    { name: "Test Form", sideBarPath: '/testform', path: '/testform', component: TestForm, displayInSidebar: true },
 ];
 
 

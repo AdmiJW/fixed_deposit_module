@@ -4,7 +4,7 @@ import { Pagination, Table } from 'rsuite';
 
 import { AppContext } from '../AppContext';
 import CurrencySpan from '../components/atomic/CurrencySpan';
-import DepositWithdrawalForm from '../components/DepositWithdrawalForm';
+import DepositWithdrawalForm from '../components/forms/DepositWithdrawalForm';
 import { getUpsertView, getAdditions, getWithdrawals } from '../services/restServer';
 
 const { Column, HeaderCell, Cell } = Table;

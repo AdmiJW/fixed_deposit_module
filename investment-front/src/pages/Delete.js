@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Button } from 'rsuite';
 
 import { AppContext } from "../AppContext";
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from '../components/screen/LoadingScreen';
+import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 import { deleteFd } from '../services/restServer';
 
 
@@ -75,24 +76,25 @@ export default function Delete(props) {
             </div>
 
         ) : progress === DELETE_STATE.LOADING ? (
+
             <LoadingScreen text={"Deleting..."} />
+
         ) : progress === DELETE_STATE.SUCCESS ? (
 
-            <div className="text-center mt-4 mb-4">
-                <i className="fas fa-check-circle fs-1 text-success"></i>
-                <p className='my-4 text-success lead fw-bold'>Deleted FD #{id} successfully!</p>
-                
-                {backBtn}
-            </div>
+            <SimpleMessageScreen
+                icon={["fas", "fa-check-circle", 'text-success']}
+                message={`Deleted FD #${id} successfully!`}
+                links={backBtn}
+            />
 
         ) : progress === DELETE_STATE.FAILURE ? (
+
+            <SimpleMessageScreen
+                icon={["fas", "fa-exclamation-circle", 'text-danger']}
+                message={`Failed to delete FD #${id}: ${data}`}
+                links={backBtn}
+            />
             
-            <div className="text-center mt-4 mb-4">
-                <i className="fas fa-exclamation-circle fs-1 text-danger"></i>
-                <p className='my-4 text-danger lead fw-bold'>Failed to delete FD #{id}: {data}</p>
-                
-                {backBtn}
-            </div>
         ) : null
     }
     </>)

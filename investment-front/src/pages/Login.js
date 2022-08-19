@@ -2,9 +2,10 @@ import React, { useState, useContext, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppContext } from "../AppContext";
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from '../components/screen/LoadingScreen';
 import { login } from '../services/restServer';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/forms/LoginForm';
+import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 
 
 
@@ -39,11 +40,9 @@ export default function Login() {
     if (!user) return <LoginForm loginHandler={loginHandler} prevUsername={prevUsername} />;
 
 
-    return (
-        <div className="text-center mt-4 mb-4">
-            <i className="fas fa-check-circle fs-1 text-success mb-3"></i>
-            <div className="my-3 lead">Logged in!</div>
-            <Link to="/fd" className='btn btn-primary text-decoration-none' >View Fixed Deposits</Link>
-        </div>
-    );
+    return <SimpleMessageScreen
+        icon={["fas", "fa-check-circle", 'text-success']}
+        message="Logged in!"
+        links={<Link to="/fd" className="btn btn-primary text-decoration-none">View Fixed Deposits</Link>}
+    />;
 }

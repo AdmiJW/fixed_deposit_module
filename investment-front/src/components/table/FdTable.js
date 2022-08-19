@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Table } from 'rsuite';
 
-import CurrencySpan from './atomic/CurrencySpan';
+import CurrencySpan from '../atomic/CurrencySpan';
 
 
 const { Column, HeaderCell, Cell } = Table;

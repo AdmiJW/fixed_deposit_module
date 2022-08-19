@@ -13,7 +13,7 @@ import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
 
-// Methods to help with authentication
+// A bean with methods to help with authentication
 @Component
 public class Auth {
 
@@ -42,6 +42,12 @@ public class Auth {
         User user = userRepository.findById( (Long)session.getAttribute("userId") ).get();
         if ( !Arrays.stream(roles).anyMatch(x -> x == user.getRole() ) )
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to view this page");
+    }
+
+    // Assumes you had already use checkAuthentication before calling this method
+    public User retrieveUser( HttpSession session ) {
+        checkAuthentication(session);
+        return userRepository.findById( (Long)session.getAttribute("userId") ).get();
     }
 
 }

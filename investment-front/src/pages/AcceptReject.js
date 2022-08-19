@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from "../AppContext";
-import LoadingScreen from '../components/LoadingScreen';
+import LoadingScreen from '../components/screen/LoadingScreen';
 import { getUpsertView, postAcceptReject } from '../services/restServer';
 import CurrencySpan from '../components/atomic/CurrencySpan';
 

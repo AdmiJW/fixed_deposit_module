@@ -55,7 +55,7 @@
                 <mxCell id="12" value="FDUpsertDTO" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
                     <mxGeometry x="-120" y="-200" width="190" height="216" as="geometry"/>
                 </mxCell>
-                <mxCell id="13" value="id: Long&#10;name: String&#10;registeredBy: String&#10;registeredDate: Date&#10;bank: String&#10;certificateNo: String&#10;referenceNo: String&#10;comment: String&#10;startDate: Date&#10;period: Integer&#10;initialAmount: Double&#10;interestRate: Double&#10;status: FdStatus" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="12" vertex="1">
+                <mxCell id="13" value="id: Long&#10;name: String&#10;registeredDate: Date&#10;bank: String&#10;certificateNo: String&#10;referenceNo: String&#10;comment: String&#10;startDate: Date&#10;period: Integer&#10;initialAmount: Double&#10;interestRate: Double&#10;status: FdStatus" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="12" vertex="1">
                     <mxGeometry y="26" width="190" height="190" as="geometry"/>
                 </mxCell>
                 <mxCell id="14" value="FDListDTO" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">

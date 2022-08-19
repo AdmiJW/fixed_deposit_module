@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,13 @@ import my.investment.fd.Entities.Addition;
 import my.investment.fd.Entities.FixedDeposit;
 import my.investment.fd.Entities.Registration;
 import my.investment.fd.Entities.Schedule;
+import my.investment.fd.Entities.User;
 import my.investment.fd.Entities.Withdrawal;
 import my.investment.fd.Logic.AccountUtil;
 import my.investment.fd.Logic.GeneralUtil;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Repositories.ScheduleRepository;
+import my.investment.fd.Security.Auth;
 
 
 
@@ -44,15 +47,22 @@ public class UpsertController {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    // Authentication
+    @Autowired
+    private Auth auth;
+
 
     //===============================
     // Controller methods
     //===============================
     @PostMapping("")
     public ResponseEntity<Object> insertOneFixedDepositRoute(
-        @RequestBody FdUpsertDTO dto
+        @RequestBody FdUpsertDTO dto,
+        HttpSession session
     ) {
-        Object res = upsertFixedDeposit(dto);
+        auth.checkAuthentication(session);
+
+        Object res = upsertFixedDeposit(dto, auth.retrieveUser(session) );
         return ResponseEntity.ok(res);
     }
 
@@ -60,10 +70,14 @@ public class UpsertController {
     @PostMapping("/many")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<Object> insertManyFixedDepositRoute(
-        @RequestBody List<FdUpsertDTO> dtos
+        @RequestBody List<FdUpsertDTO> dtos,
+        HttpSession session
     ) {
+        auth.checkAuthentication(session);
+        User user = auth.retrieveUser(session);
+
         List<Object> res = new ArrayList<>( dtos.size() );
-        for (FdUpsertDTO dto : dtos) res.add( upsertFixedDeposit(dto) );
+        for (FdUpsertDTO dto : dtos) res.add( upsertFixedDeposit(dto, user) );
         return ResponseEntity.ok(res);
     }
 
@@ -148,14 +162,13 @@ public class UpsertController {
     //      0.1 Check if the fixed deposit exists when ID is provided
     //      0.2 If it does, check if the status is not "NEW"
     //      0.3 Drop schedules if existing fixed deposit is being updated
-    // 1. Pass DTO to create/update FixedDeposit
+    // 1a. Set registrating user
+    // 1b. Pass DTO to create/update FixedDeposit
     // 2. Pass DTO to create/update Registration
     // 3. Generate Schedules based on DTO
     // 4. Connect pieces together
     // 5. Save to database
-    private Object upsertFixedDeposit(FdUpsertDTO dto) {
-        // TODO: You have to update the logged in user from the session as well.
-
+    private Object upsertFixedDeposit(FdUpsertDTO dto, User user) {
         FixedDeposit fd = new FixedDeposit();
         Registration reg = new Registration();
 
@@ -172,7 +185,9 @@ public class UpsertController {
             reg = fd.getRegistration();
         }
 
-        // 1. Pass DTO to create/update FixedDeposit
+        // 1a. Set registrating user
+        fd.setUser(user);
+        // 1b. Pass DTO to create/update FixedDeposit
         dto.updateToFixedDeposit(fd);
         // 2. Pass DTO to create/update Registration
         dto.updateToRegistration(reg);
