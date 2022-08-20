@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
 import { login } from '../services/restServer';
-import LoginForm from '../components/forms/LoginForm';
+import LoginForm from '../components/forms/form/LoginForm';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 
 
