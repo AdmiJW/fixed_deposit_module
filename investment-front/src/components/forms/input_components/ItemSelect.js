@@ -1,13 +1,14 @@
 import React from 'react';
-import { Form, DatePicker } from 'rsuite';
+import { Form, InputPicker } from 'rsuite';
 import { Controller } from 'react-hook-form';
 
 
 
-export default function DatePicker({
+export default function ItemSelect({
     name,
     label,
     control,
+    data,
     errorMessage,
     ...props
 }) {
@@ -16,10 +17,14 @@ export default function DatePicker({
         <Controller
             name={name}
             control={control}
-            render={({ field })=> <DatePicker {...field} {...props} oneTap />}
+            render={({ field })=>
+                <InputPicker data={data} {...field} {...props} />
+            }
         />
         <Form.ErrorMessage show={ errorMessage && true } >
             {errorMessage}
         </Form.ErrorMessage>
+
+        { props.children }
     </Form.Group>
 }

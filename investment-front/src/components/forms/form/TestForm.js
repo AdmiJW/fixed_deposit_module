@@ -5,6 +5,8 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import TextArea from '../input_components/TextArea';
+
 
 let renderCount = 0;
 
@@ -13,10 +15,12 @@ const schema = Yup.object({
     birthdate: Yup.date().required("Required"),
     money: Yup.number().required("Required").min(50).max(1000),
     gender: Yup.string().required("Required").oneOf(['M', 'F']),
+    description: Yup.string().required("Required"),
+    comments: Yup.string().required("Required"),
 });
 
 
-export default function TestForm({}) {
+export default function TestForm() {
     ++renderCount;
     
     // register gives 4 properties: onBlur, onChange, ref, and name. However, that conflicts with
@@ -39,7 +43,6 @@ export default function TestForm({}) {
         }, 5000);
     }, [setValue]);
 
-    console.log("ERRORS: ");
     console.log(errors);
 
 
@@ -109,7 +112,21 @@ export default function TestForm({}) {
             </Form.ErrorMessage>
         </Form.Group>
 
+        <TextArea
+            control={control}
+            name='description'
+            label='Description'
+            placeholder='Description'
+            errorMessage={errors.description?.message}
+        />
 
+        <TextArea
+            control={control}
+            name='comments'
+            label='Comment'
+            placeholder='comment'
+            errorMessage={errors.comment?.message}
+        />
 
 
         <Button type="submit" appearance="primary">Submit</Button>

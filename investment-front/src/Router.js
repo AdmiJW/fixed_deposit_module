@@ -4,14 +4,14 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 // Pages
 import FdList from './pages/FdList';
 import NotFound from './pages/NotFound';
-import FdForm from './pages/FdForm';
+import FdDetails from './pages/FdDetails';
 import Delete from './pages/Delete';
 import ScheduleList from './pages/ScheduleList';
 import AcceptReject from './pages/AcceptReject';
 import DepositWithdrawal from './pages/DepositWithdrawal';
 import Logout from './pages/Logout';
 import Login from './pages/Login';
-import TestForm from './components/forms/TestForm';
+import TestForm from './components/forms/form/TestForm';
 
 
 // What URL to redirect to if root url is provided?
@@ -24,8 +24,8 @@ export const RouteList = [
     { name: 'Fixed Deposit', sideBarPath: '/', path: '/', component: <Navigate to={HOME_REDIRECT_URL} /> },
 
     { name: 'My Fixed Deposits', sideBarPath: '/fd', path: '/fd', component: FdList, displayInSidebar: true },
-    { name: 'New Fixed Deposit', sideBarPath: '/fd/new' , path: '/fd/new', component: FdForm, displayInSidebar: true },
-    { name: 'View Fixed Deposit', path: '/fd/:id', component: FdForm, displayInSidebar: false },
+    { name: 'New Fixed Deposit', sideBarPath: '/fd/new' , path: '/fd/new', component: FdDetails, displayInSidebar: true },
+    { name: 'View Fixed Deposit', path: '/fd/:id', component: FdDetails, displayInSidebar: false },
     { name: 'View Schedules', path: '/fd/schedules/:id', component: ScheduleList, displayInSidebar: false },
     { name: 'Delete Fixed Deposit', path: '/fd/delete/:id', component: Delete, displayInSidebar: false },
     { name: 'Approve Fixed Deposit', path: '/fd/approve/:id', component: AcceptReject, displayInSidebar: false, props: { mode: 'APPROVE' } },
@@ -35,7 +35,7 @@ export const RouteList = [
     { name: "Log out", path: '/logout', component: Logout, displayInSidebar: false },
     { name: "Log in", path: '/login', component: Login, displayInSidebar: false },
 
-    { name: "Test Form", sideBarPath: '/testform', path: '/testform', component: TestForm, displayInSidebar: true },
+    { name: 'Test', sideBarPath: '/test', path: '/test', component: TestForm, displayInSidebar: true },
 ];
 
 

@@ -41,7 +41,7 @@ export const AppProvider = props => {
             onSuccess: (user) => setUser(user),
             onFailure: (err) => {
                 if (err.status !== 401) {
-                    console.dir(err);
+                    console.error(err);
                     setDangerMsg( err.message );
                 }
             },

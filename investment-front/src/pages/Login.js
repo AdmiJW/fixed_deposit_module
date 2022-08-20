@@ -20,7 +20,7 @@ export default function Login() {
     }, [setCrumb]);
 
 
-    function loginHandler( username, password, rememberMe ) {
+    function loginHandler({ username, password, rememberMe }) {
         setIsLoading(true);
         setPrevUsername(username);
         login({
@@ -34,12 +34,13 @@ export default function Login() {
 
 
 
+    // Logging in...
     if (isLoading) return <LoadingScreen text="Logging in..." />;
 
     // Haven't log in. Display login form
     if (!user) return <LoginForm loginHandler={loginHandler} prevUsername={prevUsername} />;
 
-
+    // Display log in success
     return <SimpleMessageScreen
         icon={["fas", "fa-check-circle", 'text-success']}
         message="Logged in!"
