@@ -95,8 +95,9 @@ function FdDetails(props) {
 
     // Form reset handler 
     const resetHandler = useCallback(() => {
+        setDanger(null);
         reset(defaultValues);
-    }, [reset]);
+    }, [reset, setDanger]);
 
 
     // Calculate interest from server

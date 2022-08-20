@@ -1,18 +1,27 @@
-import React, { useContext, useState, useLayoutEffect, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Form, Button, Input, ButtonGroup, InputNumber, InputGroup, DatePicker, ButtonToolbar } from 'rsuite';
-import { useFormik } from 'formik';
+import React, { useContext, useState, useLayoutEffect } from "react";
+import { Link } from "react-router-dom";
+import { Form, Button, ButtonGroup } from 'rsuite';
+
 import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 import { AppContext } from '../AppContext';
-import LoadingScreen from '../components/LoadingScreen';
-import { getUpsertView, postUpsert, getInterestAmount, register } from '../services/restServer';
+import LoadingScreen from '../components/screen/LoadingScreen';
+import { register } from '../services/restServer';
 
+import ROLE from "../interfaces/Role";
+import GENDER from "../interfaces/Gender";
+
+import TextInput from "../components/forms/input_components/TextInput";
+import ItemSelect from "../components/forms/input_components/ItemSelect";
+import DateSelect from "../components/forms/input_components/DateSelect";
+import Col from "../components/atomic/Col";
 
 
 
 // Form initial values
-const initialValues = {
+const defaultValues = {
     // Form Group 1 - Login credentials
     username: '',
     password: '',
@@ -22,11 +31,12 @@ const initialValues = {
     name: '',
     email: '',
     birthdate: null,
-    gender: 'M',
-    role: 'ROLE_USER',
+    gender: GENDER.MALE,
+    role: ROLE.ROLE_USER,
 };
+
 // Validation schema of form
-const validationSchema = Yup.object({
+const schema = Yup.object({
     username: Yup.string().required('Required'),
     password: Yup.string().required('Required'),
     confirmPassword: Yup.string().required('Required'),
@@ -34,257 +44,165 @@ const validationSchema = Yup.object({
     name: Yup.string().required('Required'),
     email: Yup.string().email("Invalid email").required('Required'),
     birthdate: Yup.date("Invalid date").required('Required'),
-    gender: Yup.string().oneOf(['M', 'F']).required('Required'),
-    role: Yup.string().oneOf(['ROLE_USER', 'ROLE_ADMIN']).required('Required'),
+    gender: Yup.string().required('Required').oneOf(Object.values(GENDER)),
+    role: Yup.string().required('Required').oneOf(Object.values(ROLE)),
 });
 
 
-// TODO: Registration page states, and render differently using the simple message screen
-// TODO: The rest of registration form.
-// TODO: Backend.
+
+const REGISTRATION_STATE = {
+    DRAFTING: 'DRAFTING',
+    SUBMITTING: 'SUBMITTING',
+    SUBMITTED: 'SUBMITTED',
+}
 
 
 
 function Registration(props) {
-    const { setCrumb, setDanger, setSuccess, setInfo } = useContext(AppContext);
+    const { setCrumb, setDanger, setSuccess } = useContext(AppContext);
+    const [ registrationState, setRegistrationState ] = useState(REGISTRATION_STATE.DRAFTING);
 
 
-    // Form Handler - Formik.
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        // Submit handler
-        onSubmit: formData => register({
-            formData,
-            onInit: ()=> setInfo('Registering...'),
-            onSuccess: ()=> setSuccess('Registered successfully'),
-            onFailure: (error)=> setDanger(error.message),
-        }),
+    // Form handler 
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues,
+        resolver: yupResolver(schema),
     });
-
-    // Calculate interest from server
-    function calculateTotalInterest() {
-        getInterestAmount({
-            onSuccess: (data) => setInterest(data.interest),
-            onFailure: (err) => {
-                setDanger("Failed to calculate interest amount: " + err.error);
-                window.scrollTo(0, 0);
-            },
-            principalAmount: formik.values.initialAmount,
-            interestRate: formik.values.interestRate,
-            period: formik.values.period,
-        });
-    }
-
-    // Reset form and states
-    function resetForm() {
-        formik.resetForm();
-        setInterest(0);
-        setStatus("Drafting");
-    }
-
-
-    // Component factory pattern
-    function generateTextFieldGroup(fieldName, labelName) {
-        return <Form.Group className='col-md' controlId={fieldName}>
-            <Form.ControlLabel>{labelName}</Form.ControlLabel>
-            <Form.Control 
-                disabled={isDisableEditing}
-                errorMessage={formik.touched[fieldName] && formik.errors[fieldName]? formik.errors[fieldName]: null}
-                {...formik.getFieldProps(fieldName) } 
-                onChange={(v,e)=> formik.handleChange(e)}
-            />
-        </Form.Group>;
-    }
-
-    function generateDatePickerGroup(fieldName, labelName) {
-        return <Form.Group className='col-md' controlId={fieldName}>
-            <Form.ControlLabel>{labelName}</Form.ControlLabel>
-            <DatePicker 
-                oneTap
-                disabled={isDisableEditing}
-                className='w-100'
-                {...formik.getFieldProps(fieldName) } 
-                onChange={v => formik.setFieldValue(fieldName, v) }
-                onBlur={()=> formik.setFieldTouched(fieldName, true) }
-            />
-            <p className='px-2 text-danger'>
-                { formik.touched[fieldName] && formik.errors[fieldName]? 'Invalid date': null }
-            </p>
-        </Form.Group>;
-    }
-
-    function generateNumberFieldGroup(fieldName, labelName, min, max, step, prefix, postfix) {
-        return <Form.Group className='col-md' controlId={fieldName}>
-            <Form.ControlLabel>{labelName}</Form.ControlLabel>
-            <InputNumber 
-                disabled={isDisableEditing}
-                className='w-100'
-                name={fieldName}
-                prefix={prefix} postfix={postfix}
-                min={min} max={max} step={step}
-                {...formik.getFieldProps(fieldName) } 
-                onChange={v => formik.setFieldValue(fieldName, v )}
-            />
-            <p className='px-2 text-danger'>
-                { formik.touched[fieldName] && formik.errors[fieldName]? formik.errors[fieldName]: null }
-            </p>
-        </Form.Group>;
-    }
-
-
-    // Get data from server when id is provided
-    useEffect(() => {
-        if (!id) return;
-        
-        getUpsertView({
-            id,
-            onInit: ()=> {
-                setDanger(null);
-                resetForm();
-            },
-            onLoading: ()=> setIsLoading(true),
-            onSuccess: (data) => {
-                formik.setValues(data);
-                formik.setFieldValue('startDate', new Date(data.startDate));
-                formik.setFieldValue('registeredDate', new Date(data.registeredDate));
-                setStatus(data.status);
-            },
-            onFailure: (err) => setDanger(err.message || "Failed to retrieve fixed deposit data"),
-            onFinal: ()=> setIsLoading(false),
-        });
-    // ! DO NOT ADD formik to the dependency array!
-    }, [id, setDanger]);
 
 
 
     // Set breadcrumb value
     useLayoutEffect(() => {
+        setDanger(null);
         setCrumb([{ name: props.route.name }]);
-    }, [props.route.name, setCrumb]);
+    }, [props.route.name, setCrumb, setDanger]);
 
 
 
-    if (isLoading) return <LoadingScreen text='Retrieving Fixed Deposit Information...' />;
+    // Handle form submit
+    function submitHandler(formData) {
+        register({
+            formData,
+            onInit: () => setRegistrationState(REGISTRATION_STATE.SUBMITTING),
+            onSuccess: () => {
+                setSuccess('Registration successful. Please proceed to login.');
+                setRegistrationState(REGISTRATION_STATE.SUBMITTED);
+            },
+            onFailure: (error) => {
+                setDanger("Registration failed: " + error.message);
+                setRegistrationState(REGISTRATION_STATE.DRAFTING);
+            },
+        });
+    }
+
+
+    if (registrationState === REGISTRATION_STATE.SUBMITTING) return <LoadingScreen text='Registration submitting...' />;
 
     return (
-    <Form fluid onSubmit={formik.handleSubmit}>
-
+    <Form fluid onSubmit={ handleSubmit(submitHandler) }>
         <h4 className="mb-3">{props.route.name} 🏦</h4>
 
+        {/* Username, Password */}
         <div className='rounded bg-white shadow-sm p-3 mb-4'>
-            {/* Name */}
-            { generateTextFieldGroup('name', 'FD Name')}
+            <p className='lead mb-3 fw-bold'>Account</p>
 
-            {/* Registrant's Name, Registration Date, Bank */}
-            <div className="row">
-                { generateTextFieldGroup('registeredBy', "Registrant's Name")}
-                { generateDatePickerGroup('registeredDate', 'Registration Date')}
-                { generateTextFieldGroup('bank', 'Bank')}
-            </div>
+            <TextInput
+                control={control}
+                name='username'
+                label='Username'
+                errorMessage={errors.username?.message}
+            />
 
-            {/* Cert No, Ref No */}
-            <div className="row">
-                { generateTextFieldGroup('certificateNo', 'Certificate No.')}
-                { generateTextFieldGroup('referenceNo', 'Reference No.')}
-            </div>
-
-            {/* Comment */}
-            <Form.Group controlId="comment" className='col-md'>
-                <Form.ControlLabel>Comment</Form.ControlLabel>
-                <Form.Control 
-                    disabled={isDisableEditing}
-                    accepter={Textarea} 
-                    placeholder='Write your comment here...'
-                    errorMessage={formik.touched.comment && formik.errors.comment? formik.errors.comment: null}
-                    {...formik.getFieldProps('comment') } 
-                    onChange={(v,e)=> formik.handleChange(e)}
-                />
-            </Form.Group>
-        </div>
-
-        <hr/>
-
-        <div className='rounded bg-white shadow-sm p-3 mb-4'>
-            {/* Start Date, Period */}
-            <div className='row'>
-                { generateDatePickerGroup('startDate', 'Start Date')}
-                { generateNumberFieldGroup('period', 'Period (Months)', 1, 100, 1, null, null)}
-            </div>
-
-            {/* Principal Amount, Interest Rate */}
-            <div className='row'>
-                { generateNumberFieldGroup('initialAmount', 'Principal Amount', 0, Number.MAX_VALUE, 0.01, 'RM', null)}
-                { generateNumberFieldGroup('interestRate', 'Interest Rate', 0, 100, 0.01, null, '%')}
-            </div>
-
-
-            {/* Interest Amount, Status (Not for editing, only display) */}
-            <div className='row'>
-                <Form.Group className='col-md'>
-                    <Form.ControlLabel>Interest Amount</Form.ControlLabel>
-                    <InputGroup className='w-100'>
-                        <InputNumber name="" disabled className='w-100' prefix='RM' value={interest} />
-                        <InputGroup.Button className='bg-primary text-white' onClick={calculateTotalInterest} >Kira</InputGroup.Button>
-                    </InputGroup>
-                </Form.Group>
-                <Form.Group className='col-md' controlId="interestRate">
-                    <Form.ControlLabel>Status</Form.ControlLabel>
-                    <Form.Control name="" disabled value={status} />
-                </Form.Group>
+            <div className='row my-2'>
+                <Col>
+                    <TextInput
+                        control={control}
+                        name='password'
+                        label='Password'
+                        errorMessage={errors.password?.message}
+                        type='password'
+                    />
+                </Col>
+                <Col>
+                    <TextInput
+                        control={control}
+                        name='confirmPassword'
+                        label='Confirm Password'
+                        errorMessage={errors.confirmPassword?.message}
+                        type='password'
+                    />
+                </Col>
             </div>
         </div>
 
-        
+        {/* Email, Gender, Name, Birthdate, Role */}
+        <div className='rounded bg-white shadow-sm p-3 mb-4'>
+            <p className='lead mb-3 fw-bold'>Details</p>
 
+            <div className='row my-2'>
+                <Col>
+                    <ItemSelect
+                        control={control}
+                        name='gender'
+                        label="Gender"
+                        errorMessage={errors.gender?.message}
+                        data={ Object.entries(GENDER).map(([key, value]) => { return { value: value, label: key } }) }
+                        className='w-100'
+                    />
+                </Col>
+                <Col>
+                    <DateSelect
+                        control={control}
+                        name='birthdate'
+                        label="Birthdate"
+                        errorMessage={errors.birthdate?.message}
+                        className='w-100'
+                    />
+                </Col>
+                <Col>
+                    <ItemSelect
+                        control={control}
+                        name='role'
+                        label="Role"
+                        errorMessage={errors.role?.message}
+                        data={ Object.entries(ROLE).map(([key, value]) => { return { value: key, label: key } }) }
+                        className='w-100'
+                    />
+                </Col>
+            </div>
 
+            <TextInput
+                control={control}
+                name='name'
+                label='Full Name'
+                errorMessage={errors.name?.message}
+            />
 
-        {/* Button controls */}
-        <ButtonToolbar className='d-flex justify-content-between'>
-            <ButtonGroup >
-                <Button size='lg' appearance="primary" type="submit" disabled={isDisableEditing}>
-                    Submit <i className="fas fa-paper-plane"></i>
-                </Button>
-                <Button size='lg' appearance="primary" color='yellow' onClick={formik.resetForm} disabled={ status !== 'Drafting' } >
-                    Clear <i className="fas fa-redo"></i>
-                </Button>
-            </ButtonGroup>
+            <TextInput
+                control={control}
+                name='email'
+                label='Email'
+                errorMessage={errors.email?.message}
+            />
+        </div>
 
-            {
-                formik.values.status === 'NEW'? 
-                <ButtonGroup>
-                    <Button size='lg' appearance="primary" color='green' onClick={()=> navigate(`/fd/approve/${formik.values.id}`)} >
-                        Approve <i className="fas fa-check"></i>
-                    </Button>
-                    <Button size='lg' appearance="primary" color='yellow' onClick={()=> navigate(`/fd/reject/${formik.values.id}`)} >
-                        Reject <i className="fas fa-times"></i>
-                    </Button>
-                    <Button size='lg' appearance="primary" color='red' onClick={()=> navigate(`/fd/delete/${ formik.values.id }`) }>
-                        Delete <i className="fas fa-trash"></i>
-                    </Button>
-                </ButtonGroup>
-                : formik.values.status?
-                <ButtonGroup>
-                    {
-                        formik.values.status === 'APPROVED'?
-                        <Button size='lg' appearance="primary" color='cyan' onClick={()=> navigate(`/fd/addition_withdraw/${ formik.values.id }`)} >Deposit/Withdrawal</Button>
-                        : null
-                    }
-                    <Button size='lg' appearance="primary" color='red' onClick={()=> navigate(`/fd/delete/${ formik.values.id }`) }>
-                        Delete <i className="fas fa-trash"></i>
-                    </Button> 
-                </ButtonGroup>
-                : null
-            }
+        <ButtonGroup>
+            <Button 
+                appearance='primary' size='lg' type='submit' 
+                disabled={ registrationState === REGISTRATION_STATE.SUBMITTED }
+            >
+                Submit
+            </Button>
+            <Button 
+                appearance='primary' size='lg' color='yellow'
+                disabled={ registrationState === REGISTRATION_STATE.SUBMITTED }
+                onClick={ ()=> reset(defaultValues) }
+            >
+                Reset
+            </Button>
+        </ButtonGroup>
 
-            <ButtonGroup >
-                <Button disabled={!formik.values.id} size='lg' appearance="primary" color='cyan'
-                    onClick={()=> navigate(`/fd/schedules/${ formik.values.id }`) }
-                >
-                    View Schedules <i className="fas fa-calendar-alt ms-2"></i>
-                </Button>
-            </ButtonGroup>
-        </ButtonToolbar>
+        <p className='text-muted my-2 text-center'>Already have an account? <Link to='/login'>Login</Link></p>
     </Form>
     );
 }

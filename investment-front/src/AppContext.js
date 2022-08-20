@@ -70,7 +70,8 @@ export const AppProvider = props => {
 
 
     const appContextObject = {
-        crumb, setCrumb,
+        crumb, 
+        setCrumb,
         user, setUser,
         danger,
         info,
