@@ -1,10 +1,10 @@
 import React from 'react';
-import { Form, InputNumber } from 'rsuite';
+import { Form, Checkbox } from 'rsuite';
 import { Controller } from 'react-hook-form';
 
 
 
-export default function NumberInput({
+export default function SingleCheckbox({
     name,
     label,
     control,
@@ -12,16 +12,15 @@ export default function NumberInput({
     ...props
 }) {
     return <Form.Group controlId={name} >
-        <Form.ControlLabel>{label}</Form.ControlLabel>
         <Controller
             name={name}
             control={control}
-            render={({ field })=>
-                <InputNumber {...field} {...props} />
-            }
+            render={({ field })=> <Checkbox {...field} {...props} > {label}</Checkbox> }
         />
         <Form.ErrorMessage show={ errorMessage && true } >
             {errorMessage}
         </Form.ErrorMessage>
+
+        { props.children }
     </Form.Group>
 }

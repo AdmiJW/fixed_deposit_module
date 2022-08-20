@@ -20,11 +20,13 @@ export default function TextInput({
             render={({ field })=> 
                 <Form.Control 
                     {...field} 
-                    errorMessage={ errorMessage && true } 
-                    placeholder={placeholder} 
                     {...props}
+                    errorMessage={ errorMessage } 
+                    placeholder={placeholder} 
                 />
             }
         />
+
+        { props.children }
     </Form.Group>
 }
