@@ -37,7 +37,7 @@ function DepositWithdrawalForm(props) {
     
     const navigate = useNavigate();
 
-    const { control, handleSubmit, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues,
         resolver: yupResolver(schema),
     });

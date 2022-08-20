@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, ButtonGroup, Form } from 'rsuite';
 
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import TextInput from './input_components/TextInput';
-import SingleCheckbox from './input_components/SingleCheckbox';
+import TextInput from '../input_components/TextInput';
+import SingleCheckbox from '../input_components/SingleCheckbox';
 
 
 
