@@ -3,8 +3,6 @@ package my.investment.fd.Controllers;
 
 import java.util.Collections;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,10 +44,7 @@ public class AuthenticationController {
         if (AuthUtil.isLoggedIn())
             return ResponseEntity.ok( Collections.singletonMap("message", "Already logged in") );
 
-        throw new ResponseStatusException(
-            HttpStatus.UNAUTHORIZED, 
-            "Not logged in. Please send a POST request to /auth/login with username & password as X-www-form-urlencoded parameters"
-        );
+        throw new ResponseStatusException( HttpStatus.UNAUTHORIZED, "Not logged in.");
     }
 
 

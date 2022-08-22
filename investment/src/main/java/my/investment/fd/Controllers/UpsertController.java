@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,7 +33,6 @@ import my.investment.fd.Logic.AccountingUtil;
 import my.investment.fd.Logic.GeneralUtil;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Repositories.ScheduleRepository;
-import my.investment.fd.Security.Auth;
 import my.investment.fd.Security.AuthUtil;
 
 
