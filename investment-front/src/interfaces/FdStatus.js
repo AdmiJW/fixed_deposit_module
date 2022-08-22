@@ -3,7 +3,7 @@
 const FdStatus = {
     NEW: 'NEW',
     APPROVED: 'APPROVED',
-    REJECTED: 'REJECTED',
+    REJECT: 'REJECT',
     DELETED: 'DELETED',
 
     // Don't exist in database, only in front-end

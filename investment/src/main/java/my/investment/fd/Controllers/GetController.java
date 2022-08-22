@@ -17,12 +17,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import my.investment.fd.DTO.FdUpsertDTO;
 import my.investment.fd.Entities.FixedDeposit;
+import my.investment.fd.Entities.User;
 import my.investment.fd.Classes.FdStatus;
 import my.investment.fd.Classes.Role;
 import my.investment.fd.Repositories.AdditionRepository;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Repositories.ScheduleRepository;
 import my.investment.fd.Repositories.WithdrawalRepository;
+import my.investment.fd.Security.AuthUtil;
 
 
 
@@ -67,14 +69,15 @@ public class GetController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid 'status' value: " + status);
         }
 
+        User u = AuthUtil.getCurrentUser();
         Pageable pg = PageRequest.of(page - 1, pageSize ); 
 
         return ResponseEntity
             .status(HttpStatus.OK)
             .body( 
-                fdStatus == null? 
-                fixedDepositRepository.findAllAsFdListDTO(pg) :
-                fixedDepositRepository.findAllByStatusAsFdListDTO(fdStatus, pg)
+                AuthUtil.isAdmin(u)?
+                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, null, pg):  // Admin can view all
+                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, u, pg)           // Normal user can see own fd only
             );
     }
 
@@ -84,9 +87,10 @@ public class GetController {
     public ResponseEntity<Object> getOneFixedDepositRoute(
         @PathVariable("id") Long id
     ) {
-        FdUpsertDTO fd = fixedDepositRepository.findByIdAsFdUpsertDTO(id);
+        FixedDeposit fd = fixedDepositRepository.findById(id).orElse(null);
         if (fd == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non-existent Fixed Deposit ID: " + id);
-        return ResponseEntity.status(HttpStatus.OK).body(fd);
+        if ( !AuthUtil.hasCRUDPermission(fd) ) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to view this Fixed Deposit");
+        return ResponseEntity.status(HttpStatus.OK).body( FdUpsertDTO.fromEntity(fd) );
     }
 
 
@@ -105,6 +109,7 @@ public class GetController {
 
         FixedDeposit fd = fixedDepositRepository.findById(id).orElse(null);
         if (fd == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non-existent Fixed Deposit ID: " + id);
+        if ( !AuthUtil.hasCRUDPermission(fd) ) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to view this Fixed Deposit");
         return ResponseEntity.status(HttpStatus.OK).body( scheduleRepository.findAllByFixedDepositOrderByDateStartAsc(fd, pg) );
     }
 

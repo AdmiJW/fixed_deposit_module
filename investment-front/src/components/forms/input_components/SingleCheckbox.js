@@ -15,7 +15,15 @@ export default function SingleCheckbox({
         <Controller
             name={name}
             control={control}
-            render={({ field })=> <Checkbox {...field} {...props} > {label}</Checkbox> }
+            render={ ({ field }) => {
+                return <Checkbox 
+                    {...field}
+                    {...props} 
+                    onChange={(_, value)=> field.onChange(value)}
+                > 
+                    {label}
+                </Checkbox>
+            }}
         />
         <Form.ErrorMessage show={ errorMessage && true } >
             {errorMessage}

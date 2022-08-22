@@ -160,7 +160,8 @@ public class UpsertController {
     // 0. Preliminary actions (Check if it is updating or new record)
     //      0.1 Check if the fixed deposit exists when ID is provided
     //      0.2 If it does, check if the status is not "NEW"
-    //      0.3 Drop schedules if existing fixed deposit is being updated
+    //      0.3 Check if user has access to update: Only admin or owner can update
+    //      0.4 Drop schedules if existing fixed deposit is being updated
     // 1a. Set registrating user
     // 1b. Pass DTO to create/update FixedDeposit
     // 2. Pass DTO to create/update Registration
@@ -171,21 +172,24 @@ public class UpsertController {
         FixedDeposit fd = new FixedDeposit();
         Registration reg = new Registration();
 
-        // 0. Preliminary actions (Check if it is updating or new record)
+        // 0. Preliminary actions (For update requests)
         if (dto.getId() != null) {
             // 0.1 Check if the fixed deposit exists when ID is provided
             fd = fixedDepositRepository.findById(dto.getId()).orElse(null);
             if (fd == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non-existent Fixed Deposit ID: " + dto.getId());
             // 0.2 If it does, check if the status is not "NEW"
             if (fd.getStatus() != FdStatus.NEW) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot edit Fixed Deposit ID: " + dto.getId() + ". It is not in NEW status");
-            // 0.3 Drop schedules if existing fixed deposit is being updated
+            // 0.3 Check if user has access to update: Only admin or owner can update
+            if ( !AuthUtil.hasCRUDPermission(fd) )
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this Fixed Deposit. You are not admin nor the owner of this FD");
+            // 0.4 Drop schedules if existing fixed deposit is being updated
             scheduleRepository.deleteByFixedDeposit(fd);
 
             reg = fd.getRegistration();
         }
 
-        // 1a. Set registrating user
-        fd.setUser(user);
+        // 1a. Set registrating user, if not already exists
+        if (fd.getUser() == null) fd.setUser(user);
         // 1b. Pass DTO to create/update FixedDeposit
         dto.updateToFixedDeposit(fd);
         // 2. Pass DTO to create/update Registration
@@ -201,6 +205,7 @@ public class UpsertController {
         fd = fixedDepositRepository.save(fd);
         return FdUpsertDTO.fromEntity(fd);
     }
+
 
 
     //-----------------------------------------------------

@@ -2,6 +2,8 @@ package my.investment.fd.Security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import my.investment.fd.Classes.Role;
+import my.investment.fd.Entities.FixedDeposit;
 import my.investment.fd.Entities.User;
 
 public class AuthUtil {
@@ -30,5 +32,28 @@ public class AuthUtil {
      */
     public static boolean isLoggedIn() {
         return getCurrentUser() != null;
+    }
+
+
+    /**
+     * Check if current user has ADMIN authority
+     * @return if current user is of Role.ROLE_ADMIN
+     */
+    public static boolean isAdmin(User user) {
+        return (user != null && user.getRole() == Role.ROLE_ADMIN);
+    }
+
+
+    /**
+     * Check if current user has authority to perform CRUD operation on provided FD.
+     * A user has permission if:
+     *      1. User is ADMIN
+     *      2. User is owner of FD
+     */
+    public static boolean hasCRUDPermission(FixedDeposit fd) {
+        User user = getCurrentUser();
+        if (user == null) return false;
+
+        return ( isAdmin(user) || fd.getUser().getId().equals( user.getId() ) );
     }
 }

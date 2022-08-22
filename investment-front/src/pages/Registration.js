@@ -168,7 +168,8 @@ function Registration(props) {
                         name='role'
                         label="Role"
                         errorMessage={errors.role?.message}
-                        data={ Object.entries(ROLE).map(([key, value]) => { return { value: key, label: key } }) }
+                        // roles are prefixed with "ROLE_", remove the prefix
+                        data={ Object.entries(ROLE).map(([key, _]) => { return { value: key, label: key.substring(5) } }) }
                         className='w-100'
                     />
                 </Col>
