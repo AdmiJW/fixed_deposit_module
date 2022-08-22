@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -61,12 +62,12 @@ public class MyApplicationSecurityConfig {
             .rememberMe()
                 .rememberMeParameter("rememberMe")
                 .tokenValiditySeconds(60 * 60 * 24 * 14) // 2 weeks
-                .key("Investment-Secret_key")
                 .and()
             .authorizeRequests()
                 // We mainly implement method security in controllers
                 .anyRequest()
-                    .permitAll();      
+                    .permitAll()
+                .and();
 
         return http.build();
     }

@@ -5,10 +5,8 @@ export const login = ({ username, password, rememberMe, onInit, onSuccess, onFai
     const URL = `http://localhost:8080/auth/login`;
     const body = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username, password, rememberMe
-        }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: new URLSearchParams({ username, password, rememberMe }),
     };
     fetchTemplate({ onInit, onSuccess, onFailure, onFinal, url: URL, body });
 }

@@ -50,7 +50,7 @@ public class AuthenticationController {
 
     @GetMapping(path="/login_success")
     public ResponseEntity<Object> getLoginSuccess() {
-        return ResponseEntity.ok(Collections.singletonMap("message", "Login success"));
+        return ResponseEntity.ok( AuthUtil.getCurrentUser() );
     }
 
     @GetMapping(path="/login_failure")
