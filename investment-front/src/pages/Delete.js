@@ -5,7 +5,7 @@ import { Button } from 'rsuite';
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
-import { deleteFd } from '../services/restServer';
+import { deleteFd } from '../services/deleteAPI';
 
 
 

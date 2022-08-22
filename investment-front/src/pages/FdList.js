@@ -3,7 +3,7 @@ import { Pagination, Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from '../AppContext';
 import FdTable from '../components/table/FdTable';
-import { getListView } from '../services/restServer';
+import { getListView } from '../services/getAPI';
 
 
 

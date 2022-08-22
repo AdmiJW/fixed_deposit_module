@@ -4,7 +4,8 @@ import { Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { getUpsertView, postAcceptReject } from '../services/restServer';
+import { getUpsertView } from '../services/getAPI';
+import { postAcceptReject } from '../services/postAPI';
 import CurrencySpan from '../components/atomic/CurrencySpan';
 
 

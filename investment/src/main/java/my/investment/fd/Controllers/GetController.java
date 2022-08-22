@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import my.investment.fd.DTO.FdUpsertDTO;
 import my.investment.fd.Entities.FixedDeposit;
 import my.investment.fd.Classes.FdStatus;
+import my.investment.fd.Classes.Role;
 import my.investment.fd.Repositories.AdditionRepository;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Repositories.ScheduleRepository;
@@ -28,6 +30,7 @@ import my.investment.fd.Repositories.WithdrawalRepository;
 @Controller
 @RequestMapping(path="/get")
 @CrossOrigin
+@Secured({ Role.Code.ROLE_ADMIN, Role.Code.ROLE_USER })
 public class GetController {
 
     // Repository Dependency Injection

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { login } from '../services/restServer';
+import { login } from '../services/authAPI';
 import LoginForm from '../components/forms/form/LoginForm';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 
@@ -18,7 +18,7 @@ export default function Login() {
     useLayoutEffect(() => {
         setDanger(null);
         setCrumb([{ name: "Log in" }]);
-    }, [setCrumb]);
+    }, [setCrumb, setDanger]);
 
 
     function loginHandler({ username, password, rememberMe }) {

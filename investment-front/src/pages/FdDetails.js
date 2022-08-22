@@ -5,7 +5,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { AppContext } from '../AppContext';
-import { getUpsertView, postUpsert, getInterestAmount } from '../services/restServer';
+import { getUpsertView, getInterestAmount } from '../services/getAPI';
+import { postUpsert } from "../services/postAPI";
 import LoadingScreen from "../components/screen/LoadingScreen";
 import FdForm from "../components/forms/form/FdForm";
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
-import { logout } from '../services/restServer';
+import { logout } from '../services/authAPI';
 
 
 export default function Logout() {

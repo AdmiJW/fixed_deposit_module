@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { AppContext } from '../AppContext';
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { register } from '../services/restServer';
+import { register } from '../services/authAPI';
 
 import ROLE from "../interfaces/Role";
 import GENDER from "../interfaces/Gender";
@@ -64,7 +64,7 @@ function Registration(props) {
 
 
     // Form handler 
-    const { control, handleSubmit, formState: { errors }, reset } = useForm({
+    const { control, handleSubmit, formState: { errors }, reset, setError } = useForm({
         defaultValues,
         resolver: yupResolver(schema),
     });
@@ -81,6 +81,9 @@ function Registration(props) {
 
     // Handle form submit
     function submitHandler(formData) {
+        if (formData.password !== formData.confirmPassword)
+            return setError('confirmPassword', { type: 'manual', message: 'Passwords do not match' });
+
         register({
             formData,
             onInit: () => setRegistrationState(REGISTRATION_STATE.SUBMITTING),

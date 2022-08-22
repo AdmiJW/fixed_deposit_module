@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,17 +22,18 @@ import org.springframework.web.server.ResponseStatusException;
 import my.investment.fd.DTO.FdAdditionWithdrawalDTO;
 import my.investment.fd.DTO.FdUpsertDTO;
 import my.investment.fd.Classes.FdStatus;
+import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.Addition;
 import my.investment.fd.Entities.FixedDeposit;
 import my.investment.fd.Entities.Registration;
 import my.investment.fd.Entities.Schedule;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Entities.Withdrawal;
-import my.investment.fd.Logic.AccountUtil;
+import my.investment.fd.Logic.AccountingUtil;
 import my.investment.fd.Logic.GeneralUtil;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Repositories.ScheduleRepository;
-import my.investment.fd.Security.Auth;
+import my.investment.fd.Security.AuthUtil;
 
 
 
@@ -47,42 +49,36 @@ public class UpsertController {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    // Authentication
-    @Autowired
-    private Auth auth;
-
 
     //===============================
     // Controller methods
     //===============================
     @PostMapping("")
+    @Secured({ Role.Code.ROLE_USER, Role.Code.ROLE_ADMIN })
     public ResponseEntity<Object> insertOneFixedDepositRoute(
-        @RequestBody FdUpsertDTO dto,
-        HttpSession session
+        @RequestBody FdUpsertDTO dto
     ) {
-        auth.checkAuthentication(session);
-
-        Object res = upsertFixedDeposit(dto, auth.retrieveUser(session) );
+        Object res = upsertFixedDeposit(dto, AuthUtil.getCurrentUser() );
         return ResponseEntity.ok(res);
     }
 
 
     @PostMapping("/many")
+    @Secured({ Role.Code.ROLE_USER, Role.Code.ROLE_ADMIN })
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<Object> insertManyFixedDepositRoute(
         @RequestBody List<FdUpsertDTO> dtos,
         HttpSession session
     ) {
-        auth.checkAuthentication(session);
-        User user = auth.retrieveUser(session);
-
         List<Object> res = new ArrayList<>( dtos.size() );
-        for (FdUpsertDTO dto : dtos) res.add( upsertFixedDeposit(dto, user) );
+        User user = AuthUtil.getCurrentUser();
+        for (FdUpsertDTO dto : dtos) res.add( upsertFixedDeposit(dto, user ) );
         return ResponseEntity.ok(res);
     }
 
 
     @PostMapping("/approve/{id}")
+    @Secured({ Role.Code.ROLE_ADMIN })
     public ResponseEntity<Object> approveFixedDepositRoute(
         @PathVariable("id") Long id
     ) {
@@ -95,6 +91,7 @@ public class UpsertController {
 
 
     @PostMapping("/reject/{id}")
+    @Secured({ Role.Code.ROLE_ADMIN })
     public ResponseEntity<Object> rejectFixedDepositRoute(
         @PathVariable("id") Long id
     ) {
@@ -107,6 +104,7 @@ public class UpsertController {
 
     
     @PostMapping("/addition")
+    @Secured({ Role.Code.ROLE_USER })
     public ResponseEntity<Object> insertOneAdditionRoute(
         @RequestBody FdAdditionWithdrawalDTO dto
     ) {
@@ -129,6 +127,7 @@ public class UpsertController {
 
 
     @PostMapping("/withdrawal")
+    @Secured({ Role.Code.ROLE_USER })
     public ResponseEntity<Object> insertOneWithdrawalRoute(
         @RequestBody FdAdditionWithdrawalDTO dto
     ) {
@@ -212,7 +211,7 @@ public class UpsertController {
         Double principal = fd.calculatePrincipalAmount();
         Double interestRate = fd.getRegistration().getInterestRate();
         LocalDate curr = fd.getStartDate();
-        Double gainingPerMonth = AccountUtil.calculateInterestAmount(principal, interestRate, 1);
+        Double gainingPerMonth = AccountingUtil.calculateInterestAmount(principal, interestRate, 1);
         
         for (Schedule s: fd.getSchedules()) {
             s.setDateStart(curr);

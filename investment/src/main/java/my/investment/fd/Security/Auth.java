@@ -6,15 +6,19 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+// import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
 
+// ! ============================================
+// ! Not used now - Migration to Spring Security
+// ! ============================================
+
 // A bean with methods to help with authentication
-@Component
+// @Component
 public class Auth {
 
     @Autowired
