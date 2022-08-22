@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.FixedDeposit;
-import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.FixedDepositRepository;
 import my.investment.fd.Security.AuthUtil;
 
@@ -42,8 +41,7 @@ public class DeleteController {
         FixedDeposit fd = fixedDepositRepository.findById(id).orElse(null);
         if (fd == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non-existent Fixed Deposit ID: " + id);
 
-        User u = AuthUtil.getCurrentUser();
-        if (u.getRole() != Role.ROLE_ADMIN && u.getId() != fd.getUser().getId()) 
+        if ( !AuthUtil.hasCRUDPermission(fd) ) 
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admin and owner can delete this Fixed Deposit");
 
         fixedDepositRepository.delete(fd);

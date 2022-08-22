@@ -12,19 +12,15 @@ import my.investment.fd.Classes.FdStatus;
 import my.investment.fd.DTO.FdListDTO;
 import my.investment.fd.DTO.FdUpsertDTO;
 import my.investment.fd.Entities.FixedDeposit;
+import my.investment.fd.Entities.User;
 
 public interface FixedDepositRepository extends JpaRepository<FixedDeposit, Long> {
-    Page<FixedDeposit> findAllByStatus(FdStatus status, Pageable pageable);
 
-    
-    default Page<FdListDTO> findAllByStatusAsFdListDTO(FdStatus status, Pageable pageable) {
-        return findAllByStatus(status, pageable).map(FdListDTO::fromEntity);
-    }
-    
+    // Unfiltered
     default List<FdListDTO> findAllAsFdListDTO() {
         return findAll().stream().map(FdListDTO::fromEntity).collect(Collectors.toList());
     }
-    
+
     default Page<FdListDTO> findAllAsFdListDTO(Pageable pageable) {
         return findAll(pageable).map(FdListDTO::fromEntity);
     }
@@ -33,10 +29,26 @@ public interface FixedDepositRepository extends JpaRepository<FixedDeposit, Long
         return findAll().stream().map(FdUpsertDTO::fromEntity).collect(Collectors.toList());
     }
 
+    
+    // Filter by ID
     default FdUpsertDTO findByIdAsFdUpsertDTO(Long id) {
         FixedDeposit fd = findById(id).orElse(null);
         if (fd == null) return null;
         return FdUpsertDTO.fromEntity(fd);
     }
 
+
+    // By status
+    Page<FixedDeposit> findAllByStatus(FdStatus status, Pageable pageable);
+    
+    default Page<FdListDTO> findAllByStatusAsFdListDTO(FdStatus status, Pageable pageable) {
+        return findAllByStatus(status, pageable).map(FdListDTO::fromEntity);
+    }
+
+    // Filter by status + user
+    Page<FixedDeposit> findAllByStatusAndUser(FdStatus status, User user, Pageable pageable);
+    
+    default Page<FdListDTO> findAllByStatusAndUserAsFdListDTO(FdStatus status, User user, Pageable pageable) {
+        return findAllByStatusAndUser(status, user, pageable).map(FdListDTO::fromEntity);
+    }
 }

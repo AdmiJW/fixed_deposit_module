@@ -180,7 +180,7 @@ public class UpsertController {
             // 0.2 If it does, check if the status is not "NEW"
             if (fd.getStatus() != FdStatus.NEW) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot edit Fixed Deposit ID: " + dto.getId() + ". It is not in NEW status");
             // 0.3 Check if user has access to update: Only admin or owner can update
-            if ( user.getRole() != Role.ROLE_ADMIN && fd.getUser().getId() != user.getId() ) 
+            if ( !AuthUtil.hasCRUDPermission(fd) )
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot edit this Fixed Deposit. You are not admin nor the owner of this FD");
             // 0.4 Drop schedules if existing fixed deposit is being updated
             scheduleRepository.deleteByFixedDeposit(fd);
@@ -188,8 +188,8 @@ public class UpsertController {
             reg = fd.getRegistration();
         }
 
-        // 1a. Set registrating user
-        fd.setUser(user);
+        // 1a. Set registrating user, if not already exists
+        if (fd.getUser() == null) fd.setUser(user);
         // 1b. Pass DTO to create/update FixedDeposit
         dto.updateToFixedDeposit(fd);
         // 2. Pass DTO to create/update Registration

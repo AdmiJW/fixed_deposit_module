@@ -68,7 +68,7 @@ public class AuthenticationController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username " + dto.getUsername() + " already exists");
         
         // Only admins can register a new admin
-        if (dto.getRole() == Role.ROLE_ADMIN && !AuthUtil.isAdmin())
+        if (dto.getRole() == Role.ROLE_ADMIN && !AuthUtil.isAdmin( AuthUtil.getCurrentUser() ) )
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can register new admins");
 
         // Set password
