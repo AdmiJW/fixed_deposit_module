@@ -4,7 +4,7 @@ import { Pagination, Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from '../AppContext';
 import ScheduleTable from '../components/table/ScheduleTable';
-import { getSchedules } from '../services/restServer';
+import { getSchedules } from '../services/getAPI';
 
 
 

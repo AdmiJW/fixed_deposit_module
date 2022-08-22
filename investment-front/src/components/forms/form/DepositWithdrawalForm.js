@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import RadioSelect from '../input_components/RadioSelect';
 import NumberInput from '../input_components/NumberInput';
-import { postAddition, postWithdrawal } from '../../../services/restServer';
+import { postAddition, postWithdrawal } from '../../../services/postAPI';
 import { AppContext } from '../../../AppContext';
 
 

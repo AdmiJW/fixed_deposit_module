@@ -1,6 +1,6 @@
 import React, { useState, createContext, useCallback, useEffect } from "react";
 
-import { isLoggedIn } from "./services/restServer";
+import { isLoggedIn } from "./services/authAPI";
 
 export const AppContext = createContext({});
 

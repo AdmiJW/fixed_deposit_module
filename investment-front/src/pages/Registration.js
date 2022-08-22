@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { AppContext } from '../AppContext';
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { register } from '../services/restServer';
+import { register } from '../services/authAPI';
 
 import ROLE from "../interfaces/Role";
 import GENDER from "../interfaces/Gender";
