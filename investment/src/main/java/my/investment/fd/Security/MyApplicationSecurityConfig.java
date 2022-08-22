@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
@@ -40,10 +41,16 @@ public class MyApplicationSecurityConfig {
             // If not disable, Spring Security will check for CSRF tokens in POST (Unless you implement CSRF.)
             // and return 403 Forbidden if it doesn't find one.
             .csrf().disable()
-            // Since we are using React, no form is needed from Spring   
+            // We'll create a custom login endpoint.
             .formLogin().disable()
             // Since we are using React, no logout form is needed from Spring
-            .logout().disable();
+            .logout()
+                .permitAll()
+                .and()
+            .rememberMe()
+                .rememberMeParameter("rememberMe")
+                .tokenValiditySeconds(60 * 60 * 24 * 14) // 2 weeks
+                .key("Investment-Secret_key");
 
         return http.build();
     }
@@ -54,15 +61,6 @@ public class MyApplicationSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-    // ? WebSecurity Config. Originally i use to bypass every page visit.
-    // ? However, fetch API requires Access-Control-Allow-Origin header to be set, so I cannot simply bypass
-    //
-    // @Bean
-    // public WebSecurityCustomizer webSecurityCustomizer() {
-    //     return (web) -> web.ignoring().anyRequest();
-    // }
 
 
 

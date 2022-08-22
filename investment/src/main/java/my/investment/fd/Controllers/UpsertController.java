@@ -47,10 +47,6 @@ public class UpsertController {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    // Authentication
-    @Autowired
-    private Auth auth;
-
 
     //===============================
     // Controller methods
@@ -60,8 +56,6 @@ public class UpsertController {
         @RequestBody FdUpsertDTO dto,
         HttpSession session
     ) {
-        auth.checkAuthentication(session);
-
         Object res = upsertFixedDeposit(dto, auth.retrieveUser(session) );
         return ResponseEntity.ok(res);
     }
@@ -73,9 +67,6 @@ public class UpsertController {
         @RequestBody List<FdUpsertDTO> dtos,
         HttpSession session
     ) {
-        auth.checkAuthentication(session);
-        User user = auth.retrieveUser(session);
-
         List<Object> res = new ArrayList<>( dtos.size() );
         for (FdUpsertDTO dto : dtos) res.add( upsertFixedDeposit(dto, user) );
         return ResponseEntity.ok(res);
