@@ -25,7 +25,7 @@ export default function Login() {
         setIsLoading(true);
         setPrevUsername(username);
         login({
-            username, password, rememberMe,
+            username, password, rememberMe: rememberMe && true,
             onInit: ()=> setDanger(null),
             onSuccess: (user) => setUser(user),
             onFailure: (err) => setDanger( err.message ),
