@@ -1,14 +1,16 @@
 import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Pagination, Button, ButtonGroup } from 'rsuite';
 
 import { AppContext } from '../AppContext';
+import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 import FdTable from '../components/table/FdTable';
 import { getListView } from '../services/getAPI';
 
 
 
 function FdList(props) {
-    const { setCrumb, setDanger } = useContext(AppContext);
+    const { setCrumb, setDanger, user } = useContext(AppContext);
     const [ isLoading, setIsLoading ] = useState(true);
     const [ pageData, setPageData ] = useState({});
     const [ pageNo, setPageNo ] = useState(1);
@@ -18,6 +20,8 @@ function FdList(props) {
 
     // Fetch page lists
     useEffect(()=> {
+        if (!user) return;
+
         getListView({
             onInit: () => setDanger(null),
             onSuccess: (data) => setPageData(data),
@@ -30,7 +34,7 @@ function FdList(props) {
             pageSize: pageSize,
             status: status,
         });
-    }, [pageNo, pageSize, status, setDanger]);
+    }, [pageNo, pageSize, status, setDanger, user]);
 
 
     // Set breadcrumb value
@@ -38,6 +42,16 @@ function FdList(props) {
         setCrumb([{ name: props.route.name }]);
     }, [props.route.name, setCrumb]);
 
+
+
+    // Not logged in
+    if (!user) return (
+        <SimpleMessageScreen 
+            icon={['fas', 'fa-exclamation-circle', 'text-danger']}
+            message="Please login first to view fixed deposits"
+            links={ <Link to="/login" className="btn btn-primary text-decoration-none">Login</Link> }
+        />
+    );
     
     return (
     <>
