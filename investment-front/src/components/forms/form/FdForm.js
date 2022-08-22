@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, ButtonGroup, InputGroup, ButtonToolbar } from 'rsuite';
 
@@ -10,6 +10,9 @@ import NumberInput from "../input_components/NumberInput";
 import TextArea from "../input_components/TextArea";
 
 import FdStatus from "../../../interfaces/FdStatus";
+
+import { AppContext } from "../../../AppContext";
+import ROLE from "../../../interfaces/Role";
 
 
 
@@ -28,11 +31,12 @@ function FdForm({
     const isDrafting = status === FdStatus.DRAFTING;
     const isNew = status === FdStatus.NEW;
     const isApproved = status === FdStatus.APPROVED;
-    const isRejected = status === FdStatus.REJECTED;
+    const isRejected = status === FdStatus.REJECT;
 
     const isDisableEditing = !(isDrafting || isNew);
 
     const navigate = useNavigate();
+    const { user } = useContext(AppContext);
 
 
     // Reusable Form Component factories
@@ -157,8 +161,37 @@ function FdForm({
 
 
             {/* If status is new, allow for approval/reject. Else, show deposit/withdrawal if approved, else simply delete btn */}
+            <ButtonGroup className='my-2'>
+            {/* Approve/Reject */}
             {
-                isNew?
+                (isNew && user?.role === ROLE.ROLE_ADMIN) &&
+                <>
+                    <Button size='lg' appearance="primary" color='green' onClick={()=> navigate(`/fd/approve/${id}`)} >
+                        Approve <i className="fas fa-check"></i>
+                    </Button>
+                    <Button size='lg' appearance="primary" color='yellow' onClick={()=> navigate(`/fd/reject/${id}`)} >
+                        Reject <i className="fas fa-times"></i>
+                    </Button>
+                </>
+            }
+
+            {/* Deposit/Withdrawal */}
+            {
+                isApproved &&
+                <Button size='lg' appearance="primary" color='cyan' onClick={()=> navigate(`/fd/addition_withdraw/${id}`)} >Deposit/Withdrawal</Button>
+            }
+
+            {/* Delete */}
+            {
+                (isApproved || isRejected || isNew) &&
+                <Button size='lg' appearance="primary" color='red' onClick={()=> navigate(`/fd/delete/${id}`) }>
+                    Delete <i className="fas fa-trash"></i>
+                </Button>
+            }
+            </ButtonGroup>
+            
+            {/* {
+                (isNew)?
                 <ButtonGroup className='my-2'>
                     <Button size='lg' appearance="primary" color='green' onClick={()=> navigate(`/fd/approve/${id}`)} >
                         Approve <i className="fas fa-check"></i>
@@ -180,7 +213,7 @@ function FdForm({
                         Delete <i className="fas fa-trash"></i>
                     </Button> 
                 </ButtonGroup>
-            }
+            } */}
 
             <ButtonGroup className='my-2'>
                 <Button 
