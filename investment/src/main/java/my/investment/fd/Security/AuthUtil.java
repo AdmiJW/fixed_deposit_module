@@ -53,6 +53,7 @@ public class AuthUtil {
     public static boolean hasCRUDPermission(FixedDeposit fd) {
         User user = getCurrentUser();
         if (user == null) return false;
-        return ( isAdmin(user) || fd.getUser().getId() == user.getId() );
+
+        return ( isAdmin(user) || fd.getUser().getId().equals( user.getId() ) );
     }
 }

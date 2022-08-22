@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import my.investment.fd.Classes.FdStatus;
 import my.investment.fd.DTO.FdListDTO;
@@ -38,16 +39,10 @@ public interface FixedDepositRepository extends JpaRepository<FixedDeposit, Long
     }
 
 
-    // By status
-    Page<FixedDeposit> findAllByStatus(FdStatus status, Pageable pageable);
-    
-    default Page<FdListDTO> findAllByStatusAsFdListDTO(FdStatus status, Pageable pageable) {
-        return findAllByStatus(status, pageable).map(FdListDTO::fromEntity);
-    }
-
-    // Filter by status + user
+    // Filter By status and user
+    @Query("select f FROM FixedDeposit f WHERE (?1 is null or f.status = ?1) and (?2 is null or f.user = ?2)")
     Page<FixedDeposit> findAllByStatusAndUser(FdStatus status, User user, Pageable pageable);
-    
+
     default Page<FdListDTO> findAllByStatusAndUserAsFdListDTO(FdStatus status, User user, Pageable pageable) {
         return findAllByStatusAndUser(status, user, pageable).map(FdListDTO::fromEntity);
     }

@@ -75,11 +75,9 @@ public class GetController {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body( 
-                (fdStatus == null)? 
-                fixedDepositRepository.findAllAsFdListDTO(pg) :
-                ( AuthUtil.isAdmin(u) ) ?
-                fixedDepositRepository.findAllByStatusAsFdListDTO(fdStatus, pg):            // Admin can view all
-                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, u, pg)   // Normal user can see own fd only
+                AuthUtil.isAdmin(u)?
+                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, null, pg):  // Admin can view all
+                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, u, pg)           // Normal user can see own fd only
             );
     }
 
