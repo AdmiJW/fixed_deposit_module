@@ -13,9 +13,9 @@ import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
 
-// !
+// ! ============================================
 // ! Not used now - Migration to Spring Security
-// !
+// ! ============================================
 
 // A bean with methods to help with authentication
 // @Component

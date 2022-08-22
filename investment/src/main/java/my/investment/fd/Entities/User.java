@@ -1,5 +1,6 @@
 package my.investment.fd.Entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import my.investment.fd.Classes.Role;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

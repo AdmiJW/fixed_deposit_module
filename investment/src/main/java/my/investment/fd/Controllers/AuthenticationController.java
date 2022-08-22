@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import my.investment.fd.DTO.LoginDTO;
 import my.investment.fd.DTO.RegistrationDTO;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
+import my.investment.fd.Security.AuthUtil;
 
 
 
@@ -32,60 +32,64 @@ public class AuthenticationController {
     // Repository Dependency Injection
     @Autowired
     private UserRepository userRepository;
-
-    // Password encoder
+    
+    // Password Encoder
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
 
     //===============================
     // Controller methods
     //===============================
-    @PostMapping(path="/login")
-    public ResponseEntity<Object> login(
-        @RequestBody LoginDTO dto,
-        HttpSession session
-    ) {
-        // Find user by username
-        User user = userRepository.findByUsername(dto.getUsername());
-        if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        if ( !passwordEncoder.matches(dto.getPassword(), user.getPassword()) )
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+    @GetMapping(path="/login")
+    public ResponseEntity<Object> loginRoute() {
+        if (AuthUtil.isLoggedIn())
+            return ResponseEntity.ok( Collections.singletonMap("message", "Already logged in") );
 
-        // Set user id into session
-        session.setAttribute("userId", user.getId() );
-        session.setMaxInactiveInterval( dto.getRememberMe()? -1: 60 * 60 ); // 1 hour until session expiry
-        return ResponseEntity.ok( user );
+        throw new ResponseStatusException(
+            HttpStatus.UNAUTHORIZED, 
+            "Not logged in. Please send a POST request to /auth/login with username & password as X-www-form-urlencoded parameters"
+        );
+    }
+
+
+    @GetMapping(path="/login_success")
+    public ResponseEntity<Object> getLoginSuccess() {
+        return ResponseEntity.ok(Collections.singletonMap("message", "Login success"));
+    }
+
+    @GetMapping(path="/login_failure")
+    public ResponseEntity<Object> getLoginFailure() {
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
     }
 
 
     @PostMapping(path="/register")
-    public ResponseEntity<Object> register(
+    public ResponseEntity<Object> registerRoute(
         @RequestBody RegistrationDTO dto
     ) {
         // Check if user already exists
-        if (userRepository.findByUsername(dto.getUsername() ) != null)
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        if (userRepository.existsByUsername(dto.getUsername() ))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username " + dto.getUsername() + " already exists");
+        
         // Set password
         dto.setPassword( passwordEncoder.encode(dto.getPassword() ) );
         // Save user
         userRepository.save( dto.toEntity() );
-        return ResponseEntity.ok( Collections.singletonMap("message", "Registration successful. Please proceed to login") );
+        return ResponseEntity.ok( Collections.singletonMap("message", "Registration successful. Please proceed to /auth/login") );
     }
 
 
-    @RequestMapping(path="/logout")
-    public ResponseEntity<Object> logout(HttpSession session) {
-        session.invalidate();
+    @GetMapping(path="/logout_success")
+    public ResponseEntity<Object> logoutRoute() {
         return ResponseEntity.ok().body( Collections.singletonMap("message", "Log out successful") );
     }
 
 
     @GetMapping(path="/is_logged_in")
-    public ResponseEntity<Object> isLoggedIn(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if ( userId == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in");
-        return ResponseEntity.ok().body( userRepository.findById(userId) );
+    public ResponseEntity<Object> isLoggedInRoute() {
+        User u = AuthUtil.getCurrentUser();
+        if ( u == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not logged in");
+        return ResponseEntity.ok().body( u );
     }
 }

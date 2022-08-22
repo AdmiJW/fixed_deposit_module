@@ -10,7 +10,7 @@ import my.investment.fd.Classes.FdStatus;
 import my.investment.fd.Entities.FixedDeposit;
 import my.investment.fd.Entities.Registration;
 import my.investment.fd.Entities.Schedule;
-import my.investment.fd.Logic.AccountUtil;
+import my.investment.fd.Logic.AccountingUtil;
 import my.investment.fd.Logic.GeneralUtil;
 
 
@@ -71,7 +71,7 @@ public class FdUpsertDTO {
         List<Schedule> schedules = new ArrayList<>();
         LocalDate curr = startDate;
         Double balance = initialAmount;
-        Double gainingPerMonth = AccountUtil.calculateInterestAmount(initialAmount, interestRate, 1);
+        Double gainingPerMonth = AccountingUtil.calculateInterestAmount(initialAmount, interestRate, 1);
 
         for (int i = 0; i < period; ++i) {
             schedules.add(new Schedule(

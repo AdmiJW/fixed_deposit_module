@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import my.investment.fd.Logic.AccountUtil;
+import my.investment.fd.Logic.AccountingUtil;
 
 
 
@@ -31,7 +31,7 @@ public class ServiceController {
         response.put("principal_amount", principalAmount.toString());
         response.put("interest_rate", interestRate.toString());
         response.put("period", period.toString());
-        response.put("interest", AccountUtil.calculateInterestAmount(principalAmount, interestRate, period).toString());
+        response.put("interest", AccountingUtil.calculateInterestAmount(principalAmount, interestRate, period).toString());
 
         return ResponseEntity.ok(response);
     }

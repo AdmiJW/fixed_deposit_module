@@ -1,6 +1,7 @@
 package my.investment.fd.DTO;
 
-import org.hibernate.query.criteria.internal.predicate.BooleanExpressionPredicate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +12,8 @@ public class LoginDTO {
     private String username;
     private String password;
     private Boolean rememberMe;
+
+    public Authentication getAuthenticationToken() {
+        return new UsernamePasswordAuthenticationToken(username, password);
+    }
 }

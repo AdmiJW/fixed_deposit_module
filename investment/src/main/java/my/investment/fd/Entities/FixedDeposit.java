@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import my.investment.fd.Classes.FdStatus;
-import my.investment.fd.Logic.AccountUtil;
+import my.investment.fd.Logic.AccountingUtil;
 
 
 
@@ -87,7 +87,7 @@ public class FixedDeposit {
     }
 
     public Double calculateInterestAmount() {
-        return AccountUtil.calculateInterestAmount(
+        return AccountingUtil.calculateInterestAmount(
             principalAmount,
             interestRate,
             period

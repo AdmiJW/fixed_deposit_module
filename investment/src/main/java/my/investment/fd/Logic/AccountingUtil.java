@@ -2,7 +2,7 @@ package my.investment.fd.Logic;
 
 
 
-public class AccountUtil {
+public class AccountingUtil {
     // Calculate the estimate interest amount for a fixed deposit
     // Assumption: The interest rate is annualized, in percentage (value of 10 means 10%)
     //              The period is in months
