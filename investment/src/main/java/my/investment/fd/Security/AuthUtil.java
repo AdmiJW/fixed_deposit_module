@@ -2,6 +2,7 @@ package my.investment.fd.Security;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.User;
 
 public class AuthUtil {
@@ -30,5 +31,11 @@ public class AuthUtil {
      */
     public static boolean isLoggedIn() {
         return getCurrentUser() != null;
+    }
+
+
+    public static boolean isAdmin() {
+        User user = getCurrentUser();
+        return (user != null && user.getRole() == Role.ROLE_ADMIN);
     }
 }

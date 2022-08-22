@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "rsuite";
+import ROLE from "../interfaces/Role";
 
 
 export default function LoginLogout({ user }) {
@@ -16,13 +17,17 @@ export default function LoginLogout({ user }) {
             </> 
         }
 
-        {/* Login & Register */}
+        {/* Register - Display if not logged in or is admin */}
+        {
+            (!user || user.role === ROLE.ROLE_ADMIN ) &&
+            <Button appearance="primary" color='violet' onClick={() => navigate("/register")}>Register</Button>
+        }
+
+        {/* Login */}
         {
             !user &&
-            <>
-                <Button appearance="primary" color='violet' onClick={() => navigate("/login")}>Login</Button>
-                <Button appearance="primary" color='violet' onClick={() => navigate("/register")}>Register</Button>
-            </>
+            <Button appearance="primary" color='violet' onClick={() => navigate("/login")}>Login</Button>
         }
+
     </div>;
 }

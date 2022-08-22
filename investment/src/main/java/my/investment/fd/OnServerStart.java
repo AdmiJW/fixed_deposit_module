@@ -1,7 +1,6 @@
 package my.investment.fd;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -13,7 +12,6 @@ import my.investment.fd.Classes.Gender;
 import my.investment.fd.Classes.Role;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
-import net.bytebuddy.asm.Advice.Local;
 
 
 @Component

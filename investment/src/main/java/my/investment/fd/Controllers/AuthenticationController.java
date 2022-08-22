@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-
+import my.investment.fd.Classes.Role;
 import my.investment.fd.DTO.RegistrationDTO;
 import my.investment.fd.Entities.User;
 import my.investment.fd.Repositories.UserRepository;
@@ -67,6 +67,10 @@ public class AuthenticationController {
         if (userRepository.existsByUsername(dto.getUsername() ))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username " + dto.getUsername() + " already exists");
         
+        // Only admins can register a new admin
+        if (dto.getRole() == Role.ROLE_ADMIN && !AuthUtil.isAdmin())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can register new admins");
+
         // Set password
         dto.setPassword( passwordEncoder.encode(dto.getPassword() ) );
         // Save user
