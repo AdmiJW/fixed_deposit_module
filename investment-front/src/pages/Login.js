@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { login } from '../services/authAPI';
+import { isLoggedIn, login } from '../services/authAPI';
 import LoginForm from '../components/forms/form/LoginForm';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 
@@ -26,9 +26,17 @@ export default function Login() {
         login({
             username, password, rememberMe: rememberMe && true,
             onInit: ()=> setDanger(null),
-            onSuccess: (user) => setUser(user),
-            onFailure: (err) => setDanger( err.message ),
-            onFinal: () => setIsLoading(false)
+            onSuccess: () => {
+                isLoggedIn({
+                    onSuccess: (user)=> setUser(user),
+                    onFailure: (e)=> setDanger(e.message + ". See console for more info."),
+                    onFinal: ()=> setIsLoading(false)
+                });
+            },
+            onFailure: (err) => {
+                setDanger( err.message );
+                setIsLoading(false);
+            }
         });
     }
 
