@@ -78,8 +78,8 @@ public class GetController {
             .status(HttpStatus.OK)
             .body( 
                 AuthUtil.isAdmin(u)?
-                fixedDepositRepository.findAll(fdStatus, null, fixedDepositName, registrantName, pg):  // Admin can view all
-                fixedDepositRepository.findAll(fdStatus, u, fixedDepositName, registrantName, pg)           // Normal user can see own fd only
+                fixedDepositRepository.findAllAsFdListDTO(fdStatus, null, fixedDepositName, registrantName, pg):  // Admin can view all
+                fixedDepositRepository.findAllAsFdListDTO(fdStatus, u, fixedDepositName, registrantName, pg)           // Normal user can see own fd only
             );
     }
 
