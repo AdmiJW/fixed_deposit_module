@@ -38,7 +38,7 @@ function FdTable({ loading, data }) {
             <Column width={30} align="center" fixed resizable >
                 <HeaderCell>#</HeaderCell>
                 <Cell className='fw-bold'>
-                    { (rowData, i)=> <span>{ data.pageable.offset + i + 1 }</span>}
+                    { (_, i)=> <span>{ data.pageable.offset + i + 1 }</span>}
                 </Cell>
             </Column>
 
@@ -52,6 +52,11 @@ function FdTable({ loading, data }) {
                 <Cell>
                     { rowData => getStatusSpan(rowData.status) }
                 </Cell>
+            </Column>
+
+            <Column width={100} resizable >
+                <HeaderCell>Registrant</HeaderCell>
+                <Cell dataKey='registeredBy' />
             </Column>
             
             <Column width={150} resizable >
