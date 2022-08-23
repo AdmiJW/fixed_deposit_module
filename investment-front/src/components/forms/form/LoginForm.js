@@ -30,7 +30,7 @@ function LoginForm(props) {
     }
 
 
-    const { control, handleSubmit, formState: { errors }, reset, watch } = useForm({
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues,
         resolver: yupResolver(schema),
     });

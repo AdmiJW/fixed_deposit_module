@@ -26,7 +26,7 @@ export default function Navbar() {
     return (
         <React.Fragment>
             {/* Navbar consisting of breadcrumb */}
-            <nav className="navbar navbar-expand-lg navbar-light" id="navbar">
+            <nav className="navbar navbar-expand-lg navbar-light px-1" id="navbar">
                 
                 <Button appearance="primary" color='violet' onClick={toggleSidebar}>
                     <i className="fas fa-align-left"></i> Menu

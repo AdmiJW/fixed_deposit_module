@@ -50,7 +50,7 @@ function FdList(props) {
             onInit: () => setDanger(null),
             onSuccess: (data) => setPageData(data),
             onFailure: (e) => {
-                setDanger(e.message + ". See console for more info.");
+                setDanger(e.message);
                 setIsLoading(false);
             },
             onFinal: () => setIsLoading(false),

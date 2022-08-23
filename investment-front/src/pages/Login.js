@@ -29,7 +29,7 @@ export default function Login() {
             onSuccess: () => {
                 isLoggedIn({
                     onSuccess: (user)=> setUser(user),
-                    onFailure: (e)=> setDanger(e.message + ". See console for more info."),
+                    onFailure: (e)=> setDanger(e.message),
                     onFinal: ()=> setIsLoading(false)
                 });
             },

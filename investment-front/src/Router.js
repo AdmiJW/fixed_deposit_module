@@ -1,6 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
+import DashboardIcon from '@rsuite/icons/Dashboard';
+import ListIcon from '@rsuite/icons/List';
+import AddOutlineIcon from '@rsuite/icons/AddOutline';
+
 // Pages
 import FdList from './pages/FdList';
 import NotFound from './pages/NotFound';
@@ -24,9 +28,9 @@ const HOME_REDIRECT_URL = '/home';
 export const RouteList = [
     { name: 'Fixed Deposit', sideBarPath: '/', path: '/', component: <Navigate to={HOME_REDIRECT_URL} /> },
 
-    { name: "Home", sideBarPath: '/home', path: '/home', component: Home, displayInSidebar: true },
-    { name: 'My Fixed Deposits', sideBarPath: '/fd', path: '/fd', component: FdList, displayInSidebar: true },
-    { name: 'New Fixed Deposit', sideBarPath: '/fd/new' , path: '/fd/new', component: FdDetails, displayInSidebar: true },
+    { name: "Home", sideBarPath: '/home', path: '/home', component: Home, displayInSidebar: true, icon: <DashboardIcon /> },
+    { name: 'My Fixed Deposits', sideBarPath: '/fd', path: '/fd', component: FdList, displayInSidebar: true, icon: <ListIcon /> },
+    { name: 'New Fixed Deposit', sideBarPath: '/fd/new' , path: '/fd/new', component: FdDetails, displayInSidebar: true, icon: <AddOutlineIcon /> },
     { name: 'View Fixed Deposit', path: '/fd/:id', component: FdDetails, displayInSidebar: false },
     { name: 'View Schedules', path: '/fd/schedules/:id', component: ScheduleList, displayInSidebar: false },
     { name: 'Delete Fixed Deposit', path: '/fd/delete/:id', component: Delete, displayInSidebar: false },

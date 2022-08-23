@@ -1,33 +1,42 @@
-import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { Sidenav, Nav } from 'rsuite';
 
 
 import { RouteList } from '../Router.js';
 
 export default function Sidebar() {
 
-    return (
-        <div id="sidebar-wrapper">
-            <div className="list-group list-group-flush">
-                <div className="accordion sidebar" id="accordionSidebar">
+    const location = useLocation();
+    const navigate = useNavigate();
+
+
+    return <div id='sidebar-wrapper'>
+        <Sidenav 
+            appearance='inverse'
+            style={{ width: '260px', height: '100%' }}
+        >
+            <Sidenav.Body>
+                <Nav activeKey={location.pathname}>
 
                     {/* Determine whether a route shall be displayed using route.displayInSidebar boolean */}
                     {/* See Router.js */}
                     {
-                        RouteList.map((route, i) =>
-                            route.displayInSidebar ?
-                            <div className="card" key={i}>
-                                <div className="card-header main p-0">
-                                    <NavLink to={route.sideBarPath} className="text-white main-link text-decoration-none">
-                                        {route.name}
-                                    </NavLink>
-                                </div>
-                            </div>
-                            : null
+                        RouteList.map((route) =>
+                            route.displayInSidebar &&
+                            <Nav.Item 
+                                key={route.sideBarPath}
+                                eventKey={route.sideBarPath}
+                                onClick={()=> navigate( route.sideBarPath )} 
+                                icon={route.icon}
+                            >
+                                { route.name }
+                            </Nav.Item>
                         )
                     }
-                </div>
-            </div>
-        </div>
-    );
+                </Nav>
+            </Sidenav.Body>
+        </Sidenav>
+    </div>
 }

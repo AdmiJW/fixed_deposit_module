@@ -52,7 +52,7 @@ export const AppProvider = props => {
     // On every route change, clear alerts
     useEffect(()=> {
         setDangerMsg(null);
-    }, [crumb]);
+    }, [crumb, setDangerMsg]);
 
 
     // Every 5 minute, poll the server to update authentication status
