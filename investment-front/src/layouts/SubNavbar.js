@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { RouteList } from '../Router.js';
 import { AppContext } from "../AppContext";
 
-import { Button } from 'rsuite';
+import { Button, Message } from 'rsuite';
 import LoginLogout from '../components/LoginLogout.js';
 
 
-export default function Navbar() {
+export default function SubNavbar() {
 
     const toggleSidebar = (e) => {
         e.preventDefault();
@@ -26,7 +26,7 @@ export default function Navbar() {
     return (
         <React.Fragment>
             {/* Navbar consisting of breadcrumb */}
-            <nav className="navbar navbar-expand-lg navbar-light" id="navbar">
+            <nav className="navbar navbar-expand-lg navbar-light px-1" id="navbar">
                 
                 <Button appearance="primary" color='violet' onClick={toggleSidebar}>
                     <i className="fas fa-align-left"></i> Menu
@@ -48,19 +48,16 @@ export default function Navbar() {
                         ))
                     }
                 </ol>
-
-                {/* ! Put login logout component here */}
-                <LoginLogout user={user} />
             </nav>
 
             {/* The title of page */}
             <div className="page-header shadow">{crumbList[crumbList.length - 1]?.name.toUpperCase()}</div>
             
             {/* Alerts */}
-            { info? <div className="alert alert-info mb-1" role="alert">{info}</div> : null }
-            { warning? <div className="alert alert-warning mb-1" role="alert">{warning}</div> : null }
-            { success? <div className="alert alert-success mb-1" role="alert">{success}</div> : null }
-            { danger? <div className="alert alert-danger mb-1" role="alert">{danger}</div> : null }
+            { info? <Message showIcon type='info'>{ info }</Message> : null }
+            { warning? <Message showIcon type='warning'>{ warning }</Message> : null }
+            { success? <Message showIcon type='success'>{ success }</Message> : null }
+            { danger? <Message showIcon type='error' >{ danger }</Message> : null }
         </React.Fragment>
     );
 }

@@ -54,7 +54,9 @@ public class GetController {
     public ResponseEntity<Object> getFixedDepositRoute(
         @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
         @RequestParam(name = "page_size", required = false, defaultValue = "10") Integer pageSize,
-        @RequestParam(name = "status", required = false, defaultValue = "") String status
+        @RequestParam(name = "fd_name", required = false) String fixedDepositName,
+        @RequestParam(name = "registrant_name", required = false) String registrantName,
+        @RequestParam(name = "status", required = false) String status
         // If sorting is required, see https://www.baeldung.com/spring-data-jpa-pagination-sorting
     ) {
         // Do not allow negative page and page size
@@ -64,7 +66,7 @@ public class GetController {
         // Tries to convert into status
         FdStatus fdStatus = null;
         try {
-            if (!status.isEmpty()) fdStatus = FdStatus.valueOf(status);
+            if (status != null && !status.isEmpty()) fdStatus = FdStatus.valueOf(status);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid 'status' value: " + status);
         }
@@ -76,8 +78,8 @@ public class GetController {
             .status(HttpStatus.OK)
             .body( 
                 AuthUtil.isAdmin(u)?
-                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, null, pg):  // Admin can view all
-                fixedDepositRepository.findAllByStatusAndUserAsFdListDTO(fdStatus, u, pg)           // Normal user can see own fd only
+                fixedDepositRepository.findAllAsFdListDTO(fdStatus, null, fixedDepositName, registrantName, pg):  // Admin can view all
+                fixedDepositRepository.findAllAsFdListDTO(fdStatus, u, fixedDepositName, registrantName, pg)           // Normal user can see own fd only
             );
     }
 

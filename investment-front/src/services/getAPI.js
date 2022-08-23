@@ -13,8 +13,13 @@ export const getInterestAmount = ({ principalAmount, interestRate, period, onIni
     fetchTemplate({ onInit, onSuccess, onFailure, onFinal, url: URL });
 }
 
-export const getListView = ({ page, pageSize, status, onInit, onSuccess, onFailure, onFinal })=> {
-    const URL = `http://localhost:8080/get/list_view?page=${page}&page_size=${pageSize}&status=${status}`;
+export const getListView = ({ page, pageSize, status, fdName, registrantName, onInit, onSuccess, onFailure, onFinal })=> {
+    let URL = `http://localhost:8080/get/list_view?`;
+    if (page) URL += `&page=${page}`;
+    if (pageSize) URL += `&page_size=${pageSize}`;
+    if (status) URL += `&status=${status}`;
+    if (fdName) URL += `&fd_name=${fdName}`;
+    if (registrantName) URL += `&registrant_name=${registrantName}`;
     fetchTemplate({ onInit, onSuccess, onFailure, onFinal, url: URL });
 }
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { AppContext } from "../AppContext";
 import LoadingScreen from '../components/screen/LoadingScreen';
-import { login } from '../services/authAPI';
+import { isLoggedIn, login } from '../services/authAPI';
 import LoginForm from '../components/forms/form/LoginForm';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 
@@ -16,7 +16,6 @@ export default function Login() {
     const [ prevUsername, setPrevUsername ] = useState(''); // When user submit once and fail, at least username is not reset
 
     useLayoutEffect(() => {
-        setDanger(null);
         setCrumb([{ name: "Log in" }]);
     }, [setCrumb, setDanger]);
 
@@ -27,9 +26,17 @@ export default function Login() {
         login({
             username, password, rememberMe: rememberMe && true,
             onInit: ()=> setDanger(null),
-            onSuccess: (user) => setUser(user),
-            onFailure: (err) => setDanger( err.message ),
-            onFinal: () => setIsLoading(false)
+            onSuccess: () => {
+                isLoggedIn({
+                    onSuccess: (user)=> setUser(user),
+                    onFailure: (e)=> setDanger(e.message),
+                    onFinal: ()=> setIsLoading(false)
+                });
+            },
+            onFailure: (err) => {
+                setDanger( err.message );
+                setIsLoading(false);
+            }
         });
     }
 

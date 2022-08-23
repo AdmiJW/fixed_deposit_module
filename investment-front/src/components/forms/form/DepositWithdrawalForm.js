@@ -87,6 +87,7 @@ function DepositWithdrawalForm(props) {
             required
             prefix='RM'
             min={0} step={0.01}
+            className='w-100'
         />
 
 

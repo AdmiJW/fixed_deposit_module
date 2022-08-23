@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import Sidebar from './layouts/Sidebar';
-import Navbar from './layouts/Navbar';
+import MainNavbar from './layouts/MainNavbar';
+import SubNavbar from './layouts/SubNavbar';
 import Router from './Router.js';
 import { AppProvider } from './AppContext';
 import LoadControl from './components/LoadControl';
@@ -12,10 +13,11 @@ const App = () => {
     return (
     <BrowserRouter >
         <AppProvider>
-            <LoadControl>   
+            <MainNavbar />   
+            <LoadControl>
                 <Sidebar />
                 <div id="page-content-wrapper">
-                    <Navbar />
+                    <SubNavbar />
                     <Router />
                 </div>
             </LoadControl>

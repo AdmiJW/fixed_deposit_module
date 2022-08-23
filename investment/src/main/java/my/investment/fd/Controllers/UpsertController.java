@@ -104,7 +104,7 @@ public class UpsertController {
 
     
     @PostMapping("/addition")
-    @Secured({ Role.Code.ROLE_USER })
+    @Secured({ Role.Code.ROLE_USER, Role.Code.ROLE_ADMIN })
     public ResponseEntity<Object> insertOneAdditionRoute(
         @RequestBody FdAdditionWithdrawalDTO dto
     ) {
@@ -112,7 +112,9 @@ public class UpsertController {
         if (fd == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non-existent Fixed Deposit ID: " + dto.getFixedDepositId());
         if (fd.getStatus() != FdStatus.APPROVED) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can only make additions to APPROVED fixed deposits");
         if (dto.getAmount() <= 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount must be greater than 0");
-        
+        if ( !AuthUtil.hasCRUDPermission(fd) ) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to make additions to this fixed deposit");
+
         Addition addition = new Addition();
         addition.setAmount(dto.getAmount());
         addition.setFixedDeposit(fd);
@@ -127,7 +129,7 @@ public class UpsertController {
 
 
     @PostMapping("/withdrawal")
-    @Secured({ Role.Code.ROLE_USER })
+    @Secured({ Role.Code.ROLE_USER, Role.Code.ROLE_ADMIN })
     public ResponseEntity<Object> insertOneWithdrawalRoute(
         @RequestBody FdAdditionWithdrawalDTO dto
     ) {
@@ -137,7 +139,9 @@ public class UpsertController {
         if (fd.getStatus() != FdStatus.APPROVED) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can only make withdrawals to APPROVED fixed deposits");
         if (dto.getAmount() <= 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount must be greater than 0");
         if (fd.getPrincipalAmount() - dto.getAmount() < 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You cannot withdraw more than the principal amount");
-        
+        if ( !AuthUtil.hasCRUDPermission(fd) ) 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to make withdrawals to this fixed deposit");
+
         Withdrawal withdrawal = new Withdrawal();
         withdrawal.setAmount(dto.getAmount());
         withdrawal.setFixedDeposit(fd);
