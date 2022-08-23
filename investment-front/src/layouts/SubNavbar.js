@@ -6,7 +6,7 @@ import { Button, Message } from 'rsuite';
 import LoginLogout from '../components/LoginLogout.js';
 
 
-export default function Navbar() {
+export default function SubNavbar() {
 
     const toggleSidebar = (e) => {
         e.preventDefault();
@@ -48,9 +48,6 @@ export default function Navbar() {
                         ))
                     }
                 </ol>
-
-                {/* ! Put login logout component here */}
-                <LoginLogout user={user} />
             </nav>
 
             {/* The title of page */}

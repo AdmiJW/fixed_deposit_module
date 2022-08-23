@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "rsuite";
+import { Button, Nav } from "rsuite";
 import ROLE from "../interfaces/Role";
 
+import { AppContext } from "../AppContext";
 
-export default function LoginLogout({ user }) {
+
+export default function LoginLogout() {
     const navigate = useNavigate();
+    const { user } = useContext(AppContext);
     
     return <div className="d-flex align-items-center justify-content-end flex-grow-1 gap-2">
 
