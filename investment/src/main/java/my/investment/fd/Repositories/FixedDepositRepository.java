@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import my.investment.fd.Classes.FdStatus;
 import my.investment.fd.DTO.FdListDTO;
@@ -39,11 +40,22 @@ public interface FixedDepositRepository extends JpaRepository<FixedDeposit, Long
     }
 
 
-    // Filter By status and user
-    @Query("select f FROM FixedDeposit f WHERE (?1 is null or f.status = ?1) and (?2 is null or f.user = ?2)")
-    Page<FixedDeposit> findAllByStatusAndUser(FdStatus status, User user, Pageable pageable);
+    // Filter By status, user, name, registrant's name
+    // Note that this is JPA query, which % is undefined. We need to concat the % ourselves
+    @Query("SELECT f FROM FixedDeposit f WHERE " + 
+    "(:status IS NULL or f.status = :status) AND " +
+    "(:user IS NULL or f.user = :user) AND " +
+    "(:fdname IS NULL or f.name LIKE CONCAT('%', :fdname, '%')) AND " +
+    "(:regname IS NULL or f.user.name LIKE CONCAT('%', :regname, '%'))")
+    Page<FixedDeposit> findAll(
+        @Param("status") FdStatus status, 
+        @Param("user") User user, 
+        @Param("fdname") String fixedDepositName, 
+        @Param("regname") String registrantName, 
+        Pageable pageable
+    );
 
-    default Page<FdListDTO> findAllByStatusAndUserAsFdListDTO(FdStatus status, User user, Pageable pageable) {
-        return findAllByStatusAndUser(status, user, pageable).map(FdListDTO::fromEntity);
+    default Page<FdListDTO> findAllAsFdListDTO(FdStatus status, User user, String fixedDepositName, String registrantName, Pageable pageable) {
+        return findAll(status, user, fixedDepositName, registrantName, pageable).map(FdListDTO::fromEntity);
     }
 }
