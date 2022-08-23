@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { RouteList } from '../Router.js';
 import { AppContext } from "../AppContext";
 
-import { Button } from 'rsuite';
+import { Button, Message } from 'rsuite';
 import LoginLogout from '../components/LoginLogout.js';
 
 
@@ -57,10 +57,10 @@ export default function Navbar() {
             <div className="page-header shadow">{crumbList[crumbList.length - 1]?.name.toUpperCase()}</div>
             
             {/* Alerts */}
-            { info? <div className="alert alert-info mb-1" role="alert">{info}</div> : null }
-            { warning? <div className="alert alert-warning mb-1" role="alert">{warning}</div> : null }
-            { success? <div className="alert alert-success mb-1" role="alert">{success}</div> : null }
-            { danger? <div className="alert alert-danger mb-1" role="alert">{danger}</div> : null }
+            { info? <Message showIcon type='info'>{ info }</Message> : null }
+            { warning? <Message showIcon type='warning'>{ warning }</Message> : null }
+            { success? <Message showIcon type='success'>{ success }</Message> : null }
+            { danger? <Message showIcon type='error' >{ danger }</Message> : null }
         </React.Fragment>
     );
 }

@@ -73,7 +73,6 @@ function Registration(props) {
 
     // Set breadcrumb value
     useLayoutEffect(() => {
-        setDanger(null);
         setCrumb([{ name: props.route.name }]);
     }, [props.route.name, setCrumb, setDanger]);
 

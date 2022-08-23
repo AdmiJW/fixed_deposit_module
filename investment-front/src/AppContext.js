@@ -49,6 +49,12 @@ export const AppProvider = props => {
     }, [setDangerMsg]);
 
 
+    // On every route change, clear alerts
+    useEffect(()=> {
+        setDangerMsg(null);
+    }, [crumb]);
+
+
     // Every 5 minute, poll the server to update authentication status
     useEffect(()=> {
         if (!user) return;  // No need to poll if user is not logged in

@@ -16,7 +16,6 @@ export default function Login() {
     const [ prevUsername, setPrevUsername ] = useState(''); // When user submit once and fail, at least username is not reset
 
     useLayoutEffect(() => {
-        setDanger(null);
         setCrumb([{ name: "Log in" }]);
     }, [setCrumb, setDanger]);
 
