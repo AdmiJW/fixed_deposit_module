@@ -1,11 +1,21 @@
 import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Pagination, Button, ButtonGroup } from 'rsuite';
+import { Pagination, Button, ButtonGroup, Form } from 'rsuite';
+import SearchIcon from '@rsuite/icons/Search';
+import { useForm } from 'react-hook-form';
 
 import { AppContext } from '../AppContext';
+import TextInput2 from '../components/forms/input_components/TextInput2';
 import SimpleMessageScreen from '../components/screen/SimpleMessageScreen';
 import FdTable from '../components/table/FdTable';
 import { getListView } from '../services/getAPI';
+import Col from '../components/atomic/Col';
+
+
+const defaultValues = {
+    registrantSearch: '',
+    fdNameSearch: ''
+};
 
 
 
@@ -16,12 +26,26 @@ function FdList(props) {
     const [ pageNo, setPageNo ] = useState(1);
     const [ pageSize, setPageSize ] = useState(10);
     const [ status, setStatus ] = useState('');
+    const [ fdName, setFdName ] = useState('');
+    const [ registrant, setRegistrant ] = useState('');
+
+    const { control, handleSubmit, reset } = useForm({ defaultValues });
+
+
+    const submitHandler = ({ registrantSearch, fdNameSearch }) => {
+        setRegistrant(registrantSearch);
+        setFdName(fdNameSearch);
+        setPageNo(1);
+    }
+
+    const resetHandler = () => {
+        reset(defaultValues);
+        submitHandler(defaultValues);
+    };
 
 
     // Fetch page lists
     useEffect(()=> {
-        if (!user) return;
-
         getListView({
             onInit: () => setDanger(null),
             onSuccess: (data) => setPageData(data),
@@ -33,8 +57,10 @@ function FdList(props) {
             page: pageNo,
             pageSize: pageSize,
             status: status,
+            fdName: fdName,
+            registrantName: registrant
         });
-    }, [pageNo, pageSize, status, setDanger, user]);
+    }, [pageNo, pageSize, status, setDanger, fdName, registrant]);
 
 
     // Set breadcrumb value
@@ -55,6 +81,35 @@ function FdList(props) {
     
     return (
     <>
+        {/* Search fields */}
+        <Form className='row my-3' onSubmit={handleSubmit(submitHandler)}>
+            <Col className='mt-2'>
+                <TextInput2
+                    name="registrantSearch"
+                    control={control}
+                    placeholder="Search registrant"
+                    button={<SearchIcon />}
+                    buttonProps={{ type: 'submit' }}
+                />
+            </Col>
+            <Col className='mt-2'>
+                <TextInput2
+                    name="fdNameSearch"
+                    control={control}
+                    placeholder="Search Fixed Deposit"
+                    button={<SearchIcon />}
+                    buttonProps={{ type: 'submit' }}
+                />
+            </Col>
+        </Form>
+
+        <div className='text-end'>
+            <Button appearance='primary' color='violet' onClick={resetHandler}>
+                Reset <i className='fa fa-refresh px-1'></i>
+            </Button>
+        </div>
+
+
         {/* Buttons for page size and sorting order */}
         <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex gap-2 my-3 align-items-center'>
