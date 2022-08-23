@@ -18,7 +18,7 @@ function Home(props) {
     useLayoutEffect(() => {
         setCrumb([{ name: props.route.name }]);
     }, [props.route.name, setCrumb]);
-    
+
 
     return <>
         <Carousel autoplay className="custom-slider">
@@ -26,6 +26,10 @@ function Home(props) {
                 IMAGES.map((img, i) => <img key={i} src={img} alt="Fixed deposit" style={{ objectFit: 'cover'}}/>)
             }
         </Carousel>
+
+        <h1 className='fs-2 my-3 text-center'>Fixed Deposit</h1>
+
+        <p className='lead mx-3'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque dui arcu, commodo sit amet faucibus at, semper in orci. Phasellus mollis ante sit amet purus sollicitudin interdum.</p>
     </>;
 }
 
