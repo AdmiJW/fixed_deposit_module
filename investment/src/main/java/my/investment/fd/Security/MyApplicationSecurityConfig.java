@@ -51,6 +51,7 @@ public class MyApplicationSecurityConfig {
                 .loginProcessingUrl("/auth/login")
                 .defaultSuccessUrl("/auth/login_success")
                 .failureUrl("/auth/login_failure")
+                // .failureHandler( new MyAuthenticationFailureHandler() )
                 .permitAll()
                 .and()
             // Since we are using React, no logout form is needed from Spring

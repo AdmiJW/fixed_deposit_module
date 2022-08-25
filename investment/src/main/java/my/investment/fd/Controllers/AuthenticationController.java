@@ -59,6 +59,12 @@ public class AuthenticationController {
     }
 
 
+    @GetMapping(path="/ip_block")
+    public ResponseEntity<Object> getIpBlock() {
+        throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "IP is blocked for 24 hours.");
+    }
+
+
     @PostMapping(path="/register")
     public ResponseEntity<Object> registerRoute(
         @RequestBody RegistrationDTO dto
