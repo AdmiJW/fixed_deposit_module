@@ -1,4 +1,4 @@
-package my.investment.fd.Security;
+package my.investment.fd.Security.BruteForce;
 
 import javax.servlet.http.HttpServletRequest;
 

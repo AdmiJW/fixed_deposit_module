@@ -1,4 +1,4 @@
-package my.investment.fd.Security;
+package my.investment.fd.Security.BruteForce;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -18,13 +18,14 @@ public class LoginAttemptService {
     private LoadingCache<String, Integer> attemptsCache;
 
     public LoginAttemptService() {
-        super();
-        attemptsCache = CacheBuilder.newBuilder().
-          expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
-            public Integer load(String key) {
-                return 0;
-            }
-        });
+        attemptsCache = CacheBuilder
+            .newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .build(
+                new CacheLoader<String, Integer>() {
+                    public Integer load(String key) { return 0; }
+                }
+            );
     }
 
     public void loginSucceeded(String key) {

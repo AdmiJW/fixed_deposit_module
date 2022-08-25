@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import my.investment.fd.Classes.Role;
@@ -54,8 +55,9 @@ public class AuthenticationController {
     }
 
     @GetMapping(path="/login_failure")
-    public ResponseEntity<Object> getLoginFailure() {
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
+    public ResponseEntity<Object> getLoginFailure( @RequestParam("message") String message ) {
+        if (message == null || message.isEmpty() ) message = "Bad credentials"; 
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Cannot login: " + message);
     }
 
 
